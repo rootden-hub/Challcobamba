@@ -25,15 +25,21 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Función para procesar y generar gráficos de un archivo
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+from docx import Document
+from io import BytesIO
+
+# Función para generar gráficos
 def generar_graficos(df, archivo_nombre, pdf_pages):
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df['ColumnaX'], df['ColumnaY'])
+    ax.plot(df['ColumnaX'], df['ColumnaY'])  # Asegúrate de que estas columnas existan
     ax.set_title(f'Gráfico para {archivo_nombre}')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
 
-    # Guardar gráfico en un archivo temporal o en memoria
+    # Guardar el gráfico en un archivo en memoria
     img_stream = BytesIO()
     plt.savefig(img_stream, format='png')
     img_stream.seek(0)  # Reposicionar al inicio del archivo en memoria
@@ -42,38 +48,37 @@ def generar_graficos(df, archivo_nombre, pdf_pages):
     doc.add_paragraph(f"Gráfico generado para {archivo_nombre}")
     doc.add_picture(img_stream)
 
-# Función para generar el reporte Word
+# Función para generar el reporte en Word
 def generar_reporte(df1, df2, archivo_1, archivo_2):
-    # Crear documento Word
     global doc
     doc = Document()
     
-    # Generar gráficos para el primer archivo
+    # Gráficos para el primer archivo
     generar_graficos(df1, archivo_1.name, None)
     
-    # Generar gráficos para el segundo archivo
+    # Gráficos para el segundo archivo
     generar_graficos(df2, archivo_2.name, None)
     
     # Guardar el documento Word
     doc.save('reporte.docx')
     return 'reporte.docx'
 
-# Interfaz Streamlit (sin título adicional ni elementos extras)
-archivo_1 = st.file_uploader("Subir el archivo TXT", type="txt")
+# Cargar el primer archivo (como en el código original)
+archivo_1 = st.file_uploader("Sube el primer archivo TXT", type="txt")
 
-# Solo mostrar la opción del segundo archivo si el primero ha sido cargado
+# Si se ha cargado el primer archivo, cargar el segundo archivo
 if archivo_1:
-    # Leer el primer archivo en DataFrame
-    df1 = pd.read_csv(archivo_1, delimiter='\t')  # Ajusta si es necesario
-    
-    # Permitir al usuario cargar el segundo archivo
-    archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
-    
-    if archivo_2:
-        # Leer el segundo archivo en DataFrame
-        df2 = pd.read_csv(archivo_2, delimiter='\t')  # Ajusta si es necesario
+    # Leer el primer archivo en un DataFrame
+    df1 = pd.read_csv(archivo_1, delimiter='\t')  # O ajusta esto según el tipo de archivo y formato
 
-        # Botón para generar reporte
+    # Opción para cargar el segundo archivo después de cargar el primero
+    archivo_2 = st.file_uploader("Sube el segundo archivo TXT", type="txt")
+
+    if archivo_2:
+        # Leer el segundo archivo
+        df2 = pd.read_csv(archivo_2, delimiter='\t')  # O ajusta esto según el tipo de archivo y formato
+
+        # Botón para generar el reporte con ambos archivos
         if st.button('Generar Reporte'):
             reporte = generar_reporte(df1, df2, archivo_1, archivo_2)
             st.success(f'Reporte generado: {reporte}')
