@@ -8,6 +8,7 @@ from datetime import datetime
 
 import matplotlib.patches as mpatches
 import matplotlib.dates as mdates
+import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -23,8 +24,48 @@ from docx.shared import Pt
 from docx import Document
 from io import BytesIO
 
+#NUEVO CODIGO
+# Título de la aplicación
+st.title('Generador de Reportes Diarios de Alertas por Descargas Eléctricas Atmosféricas')
 
-# ****************** Extraer la fecha del nombre del archivo
+# Solicitar al usuario que cargue dos archivos
+file1 = st.file_uploader("Selecciona un archivo de texto (.txt) para el primer conjunto de datos", type="txt")
+file2 = st.file_uploader("Selecciona un archivo de texto (.txt) para el segundo conjunto de datos", type="txt")
+
+# Verificar si se han subido los archivos
+if file1 is not None and file2 is not None:
+    # Procesar el primer archivo
+    df1 = pd.read_csv(file1, sep='\t')  # Asumimos que el archivo tiene datos separados por tabulaciones
+    
+    # Procesar el segundo archivo
+    df2 = pd.read_csv(file2, sep='\t')  # También asumimos el mismo formato para el segundo archivo
+
+    # Aquí agregamos el código para procesar los archivos y generar los gráficos
+    # Asumimos que ambos archivos contienen datos con un formato similar
+
+    # Gráfico 1: Ejemplo de gráfico para el primer archivo
+    st.subheader('Gráfico 1: Información del primer archivo')
+    fig1, ax1 = plt.subplots()
+    ax1.plot(df1['Fecha'], df1['Valor'])  # Suponemos que hay columnas 'Fecha' y 'Valor'
+    ax1.set_title('Gráfico del primer archivo')
+    st.pyplot(fig1)
+
+    # Gráfico 2: Ejemplo de gráfico para el segundo archivo
+    st.subheader('Gráfico 2: Información del segundo archivo')
+    fig2, ax2 = plt.subplots()
+    ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
+    ax2.set_title('Gráfico del segundo archivo')
+    st.pyplot(fig2)
+
+    # Mostrar los primeros datos de ambos archivos
+    st.write("Primer archivo - Datos:")
+    st.write(df1.head())
+    st.write("Segundo archivo - Datos:")
+    st.write(df2.head())
+
+else:
+    st.warning('Por favor, selecciona ambos archivos de texto para continuar.')
+#FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
     file_name = file_path.split("/")[-1]
