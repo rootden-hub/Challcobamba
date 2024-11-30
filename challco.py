@@ -82,7 +82,6 @@ pdf_pages.close()
 st.write("Los gráficos han sido generados y guardados en 'graficos_resultados.pdf'. Puedes descargarlo haciendo clic abajo.")
 st.download_button("Descargar PDF", "graficos_resultados.pdf", file_name="graficos_resultados.pdf")
 
-
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
