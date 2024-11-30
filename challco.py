@@ -25,48 +25,43 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-def process_file(file):
-    # Intentar leer el archivo con delimitador de tabulación
-    try:
-        df = pd.read_csv(file, sep='\t')
-        return df
-    except Exception as e:
-        st.error(f"Error al leer el archivo: {e}")
-        return None
+# Función para leer y procesar el archivo (asegurarse que los archivos sean similares)
+def procesar_archivo(archivo):
+    # Leer el archivo (suponiendo que es un CSV)
+    df = pd.read_csv(archivo)
+    
+    # Aquí agregamos las mismas operaciones de procesamiento que tienes para el primer archivo
+    # por ejemplo, si haces algo como:
+    # df['Fecha'] = pd.to_datetime(df['Fecha'])
+    # y otras manipulaciones de datos
+    return df
 
-st.title("Análisis de Archivos de Texto")
+# Función para generar gráficos
+def generar_graficos(df, nombre_archivo):
+    st.write(f"Gráficos para {nombre_archivo}")
+    
+    # Ejemplo de gráfico: Gráfico de línea de alguna columna
+    fig, ax = plt.subplots()
+    ax.plot(df['ColumnaX'], df['ColumnaY'])
+    ax.set_title(f"Gráfico de {nombre_archivo}")
+    ax.set_xlabel('ColumnaX')
+    ax.set_ylabel('ColumnaY')
+    st.pyplot(fig)
+    
+# Interfaz de Streamlit
+st.title('Carga de Archivos y Generación de Gráficos')
 
-# Subir múltiples archivos
-uploaded_files = st.file_uploader("Sube tus archivos de texto", type=['txt'], accept_multiple_files=True)
+# Cargar el primer archivo
+archivo_1 = st.file_uploader("Sube el primer archivo CSV", type=["csv"])
+if archivo_1:
+    df1 = procesar_archivo(archivo_1)
+    generar_graficos(df1, "Primer archivo")
 
-if uploaded_files:
-    all_data = []
-    for uploaded_file in uploaded_files:
-        st.write(f"Procesando archivo: {uploaded_file.name}")
-        df = process_file(uploaded_file)
-        if df is not None:
-            all_data.append(df)
-
-    if all_data:
-        # Concatenar los datos de todos los archivos
-        combined_data = pd.concat(all_data, ignore_index=True)
-
-        st.write("Datos combinados:")
-        st.dataframe(combined_data)
-
-        # Gráfico básico: Conteo de eventos por descripción
-        if 'Description' in combined_data.columns:
-            description_counts = combined_data['Description'].value_counts()
-
-            fig, ax = plt.subplots()
-            description_counts.plot(kind='bar', ax=ax)
-            ax.set_title("Conteo de Eventos por Descripción")
-            ax.set_xlabel("Descripción")
-            ax.set_ylabel("Frecuencia")
-
-            st.pyplot(fig)
-        else:
-            st.warning("No se encontró la columna 'Description' en los datos.")
+# Cargar el segundo archivo
+archivo_2 = st.file_uploader("Sube el segundo archivo CSV", type=["csv"])
+if archivo_2:
+    df2 = procesar_archivo(archivo_2)
+    generar_graficos(df2, "Segundo archivo")
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
