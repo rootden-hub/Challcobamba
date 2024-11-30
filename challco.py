@@ -61,8 +61,10 @@ def generar_reporte(df1, df2, archivo_1, archivo_2):
 # Interfaz Streamlit
 st.title('Generador de Reportes')
 
-# Cargar los archivos
+# Aquí ya tenemos el primer archivo cargado como en el código original
 archivo_1 = st.file_uploader("Subir el primer archivo TXT", type="txt")
+
+# Agregamos una opción para cargar el segundo archivo
 archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
 
 # Procesar los archivos si están cargados
