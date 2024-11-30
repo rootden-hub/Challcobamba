@@ -25,57 +25,48 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Titulo de la aplicación
-st.title("Generador de Reportes Diarios de Alertas por Descargas Eléctricas Atmosféricas")
+def process_file(file):
+    # Intentar leer el archivo con delimitador de tabulación
+    try:
+        df = pd.read_csv(file, sep='\t')
+        return df
+    except Exception as e:
+        st.error(f"Error al leer el archivo: {e}")
+        return None
 
-# Solicitar el primer archivo
-file1 = st.file_uploader("Selecciona el primer archivo de texto (.txt)", type=["txt"])
+st.title("Análisis de Archivos de Texto")
 
-# Solicitar el segundo archivo
-file2 = st.file_uploader("Selecciona el segundo archivo de texto (.txt)", type=["txt"])
+# Subir múltiples archivos
+uploaded_files = st.file_uploader("Sube tus archivos de texto", type=['txt'], accept_multiple_files=True)
 
-# Botón para generar el reporte
-if st.button("Generar Reporte"):
-    # Verificar si ambos archivos fueron cargados
-    if file1 and file2:
-        # Cargar los archivos en DataFrames
-        try:
-            df1 = pd.read_csv(file1, delimiter="\t")  # Ajusta según el delimitador de tu archivo
-            df2 = pd.read_csv(file2, delimiter="\t")  # Ajusta según el delimitador de tu archivo
-            
-            # Verificar las primeras filas de los DataFrames
-            st.write("Primer archivo (df1):")
-            st.write(df1.head())
+if uploaded_files:
+    all_data = []
+    for uploaded_file in uploaded_files:
+        st.write(f"Procesando archivo: {uploaded_file.name}")
+        df = process_file(uploaded_file)
+        if df is not None:
+            all_data.append(df)
 
-            st.write("Segundo archivo (df2):")
-            st.write(df2.head())
+    if all_data:
+        # Concatenar los datos de todos los archivos
+        combined_data = pd.concat(all_data, ignore_index=True)
 
-            # Verificar los nombres de las columnas
-            if 'Fecha' in df1.columns and 'Valor' in df1.columns:
-                st.subheader("Gráficos para el Primer Archivo")
-                fig1, ax1 = plt.subplots()
-                ax1.plot(df1['Fecha'], df1['Valor'])  # Suponiendo que 'Fecha' y 'Valor' son las columnas
-                ax1.set_title("Gráfico del Primer Archivo")
-                ax1.set_xlabel("Fecha")
-                ax1.set_ylabel("Valor")
-                st.pyplot(fig1)
-            else:
-                st.error("El primer archivo no tiene las columnas 'Fecha' y 'Valor'.")
+        st.write("Datos combinados:")
+        st.dataframe(combined_data)
 
-            if 'Fecha' in df2.columns and 'Valor' in df2.columns:
-                st.subheader("Gráficos para el Segundo Archivo")
-                fig2, ax2 = plt.subplots()
-                ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
-                ax2.set_title("Gráfico del Segundo Archivo")
-                ax2.set_xlabel("Fecha")
-                ax2.set_ylabel("Valor")
-                st.pyplot(fig2)
-            else:
-                st.error("El segundo archivo no tiene las columnas 'Fecha' y 'Valor'.")
-        except Exception as e:
-            st.error(f"Hubo un error al procesar los archivos: {e}")
-    else:
-        st.warning("Por favor, carga ambos archivos para generar el reporte.")
+        # Gráfico básico: Conteo de eventos por descripción
+        if 'Description' in combined_data.columns:
+            description_counts = combined_data['Description'].value_counts()
+
+            fig, ax = plt.subplots()
+            description_counts.plot(kind='bar', ax=ax)
+            ax.set_title("Conteo de Eventos por Descripción")
+            ax.set_xlabel("Descripción")
+            ax.set_ylabel("Frecuencia")
+
+            st.pyplot(fig)
+        else:
+            st.warning("No se encontró la columna 'Description' en los datos.")
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
