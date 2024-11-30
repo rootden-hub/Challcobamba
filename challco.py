@@ -47,24 +47,33 @@ if file1 and file2:
     st.write("Segundo archivo (df2):")
     st.write(df2.head())
 
+    # Verificar los nombres de las columnas en el primer archivo
+    st.write("Columnas del primer archivo (df1):")
+    st.write(df1.columns)
+
     # Generar los gráficos para el primer archivo
-    st.subheader("Gráficos para el Primer Archivo")
-    fig1, ax1 = plt.subplots()
-    ax1.plot(df1['Fecha'], df1['Valor'])  # Suponiendo que 'Fecha' y 'Valor' son las columnas
-    ax1.set_title("Gráfico del Primer Archivo")
-    ax1.set_xlabel("Fecha")
-    ax1.set_ylabel("Valor")
-    st.pyplot(fig1)
-
+    if 'Fecha' in df1.columns and 'Valor' in df1.columns:
+        st.subheader("Gráficos para el Primer Archivo")
+        fig1, ax1 = plt.subplots()
+        ax1.plot(df1['Fecha'], df1['Valor'])  # Suponiendo que 'Fecha' y 'Valor' son las columnas
+        ax1.set_title("Gráfico del Primer Archivo")
+        ax1.set_xlabel("Fecha")
+        ax1.set_ylabel("Valor")
+        st.pyplot(fig1)
+    else:
+        st.write("El primer archivo no tiene las columnas 'Fecha' y 'Valor'.")
+    
     # Generar los gráficos para el segundo archivo
-    st.subheader("Gráficos para el Segundo Archivo")
-    fig2, ax2 = plt.subplots()
-    ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
-    ax2.set_title("Gráfico del Segundo Archivo")
-    ax2.set_xlabel("Fecha")
-    ax2.set_ylabel("Valor")
-    st.pyplot(fig2)
-
+    if 'Fecha' in df2.columns and 'Valor' in df2.columns:
+        st.subheader("Gráficos para el Segundo Archivo")
+        fig2, ax2 = plt.subplots()
+        ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
+        ax2.set_title("Gráfico del Segundo Archivo")
+        ax2.set_xlabel("Fecha")
+        ax2.set_ylabel("Valor")
+        st.pyplot(fig2)
+    else:
+        st.write("El segundo archivo no tiene las columnas 'Fecha' y 'Valor'.")
 else:
     st.warning("Por favor, carga ambos archivos para ver los gráficos.")
 #FIN DE NUEVO CODIGO
