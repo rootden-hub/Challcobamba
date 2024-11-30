@@ -25,6 +25,7 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
+# Función para procesar y generar gráficos de un archivo
 def generar_graficos(df, archivo_nombre, pdf_pages):
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(df['ColumnaX'], df['ColumnaY'])
@@ -57,26 +58,26 @@ def generar_reporte(df1, df2, archivo_1, archivo_2):
     doc.save('reporte.docx')
     return 'reporte.docx'
 
-# Interfaz Streamlit
-st.title('Generador de Reportes')
+# Interfaz Streamlit (sin título adicional ni elementos extras)
+archivo_1 = st.file_uploader("Subir el archivo TXT", type="txt")
 
-# Solicitar solo el primer archivo como en el código original
-archivo_1 = st.file_uploader("Subir el primer archivo TXT", type="txt")
-
-# Luego, agregar la opción para cargar el segundo archivo
-archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
-
-# Procesar los archivos si están cargados
-if archivo_1 and archivo_2:
-    # Leer los archivos en DataFrame
+# Solo mostrar la opción del segundo archivo si el primero ha sido cargado
+if archivo_1:
+    # Leer el primer archivo en DataFrame
     df1 = pd.read_csv(archivo_1, delimiter='\t')  # Ajusta si es necesario
-    df2 = pd.read_csv(archivo_2, delimiter='\t')  # Ajusta si es necesario
     
-    # Generar reporte en Word
-    if st.button('Generar Reporte'):
-        reporte = generar_reporte(df1, df2, archivo_1, archivo_2)
-        st.success(f'Reporte generado: {reporte}')
-        st.download_button('Descargar Reporte', reporte)
+    # Permitir al usuario cargar el segundo archivo
+    archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
+    
+    if archivo_2:
+        # Leer el segundo archivo en DataFrame
+        df2 = pd.read_csv(archivo_2, delimiter='\t')  # Ajusta si es necesario
+
+        # Botón para generar reporte
+        if st.button('Generar Reporte'):
+            reporte = generar_reporte(df1, df2, archivo_1, archivo_2)
+            st.success(f'Reporte generado: {reporte}')
+            st.download_button('Descargar Reporte', reporte)
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
