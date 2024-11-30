@@ -29,22 +29,27 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # Función para analizar y procesar el archivo
 def analizar_datos(archivo):
-    # Asumimos que el archivo es un .txt y lo cargamos correctamente
-    df = pd.read_csv(archivo, delimiter="\t")  # Ajusta el delimitador si es necesario
+    # Cargar el archivo txt (ajustar delimitador si es necesario)
+    df = pd.read_csv(archivo, delimiter="\t")  # Asumimos que el archivo tiene tabulaciones como delimitadores
+    # Eliminar espacios en los nombres de las columnas
+    df.columns = df.columns.str.strip()
     return df
 
 # Función para generar las gráficas de los datos
 def generar_graficos(df, nombre_archivo, pdf_pages):
-    # Crear las gráficas como en tu código original
-    fig, ax = plt.subplots()
-    ax.plot(df['ColumnaX'], df['ColumnaY'])
-    ax.set_title(f'Gráfica para {nombre_archivo}')
-    ax.set_xlabel('Eje X')
-    ax.set_ylabel('Eje Y')
+    # Verificar si las columnas existen
+    if 'ColumnaX' in df.columns and 'ColumnaY' in df.columns:
+        fig, ax = plt.subplots()
+        ax.plot(df['ColumnaX'], df['ColumnaY'])
+        ax.set_title(f'Gráfica para {nombre_archivo}')
+        ax.set_xlabel('Eje X')
+        ax.set_ylabel('Eje Y')
 
-    # Guardar la gráfica en el PDF
-    pdf_pages.savefig(fig)
-    plt.close(fig)
+        # Guardar la gráfica en el PDF
+        pdf_pages.savefig(fig)
+        plt.close(fig)
+    else:
+        st.error(f"El archivo {nombre_archivo} no tiene las columnas 'ColumnaX' y 'ColumnaY'.")
 
 # Función para generar el reporte en PDF
 def generar_reporte(df1, df2, archivo_1, archivo_2):
