@@ -25,70 +25,89 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-# Función para analizar y procesar el archivo
+# Función para analizar el archivo
 def analizar_datos(archivo):
-    # Cargar el archivo txt (ajustar delimitador si es necesario)
-    df = pd.read_csv(archivo, delimiter="\t")  # Asumimos que el archivo tiene tabulaciones como delimitadores
-    # Eliminar espacios en los nombres de las columnas
-    df.columns = df.columns.str.strip()
+    # Aquí va tu lógica para procesar el archivo
+    df = pd.read_csv(archivo, delimiter="\t")  # Asegúrate de que este es el formato correcto
+    # Realiza el procesamiento adicional aquí si es necesario
     return df
 
-# Función para generar las gráficas de los datos
-def generar_graficos(df, nombre_archivo, pdf_pages):
-    # Verificar si las columnas existen
+# Función para generar los gráficos
+def generar_graficos(df, nombre_archivo):
+    # Crear figura y gráfico
+    fig, ax = plt.subplots()
+    
+    # Graficar solo si las columnas necesarias existen
     if 'ColumnaX' in df.columns and 'ColumnaY' in df.columns:
-        fig, ax = plt.subplots()
         ax.plot(df['ColumnaX'], df['ColumnaY'])
         ax.set_title(f'Gráfica para {nombre_archivo}')
         ax.set_xlabel('Eje X')
         ax.set_ylabel('Eje Y')
-
-        # Guardar la gráfica en el PDF
-        pdf_pages.savefig(fig)
-        plt.close(fig)
+        
+        # Convertir el gráfico a imagen
+        canvas = FigureCanvas(fig)
+        img_stream = BytesIO()
+        canvas.print_png(img_stream)
+        img_stream.seek(0)
+        
+        return img_stream
     else:
         st.error(f"El archivo {nombre_archivo} no tiene las columnas 'ColumnaX' y 'ColumnaY'.")
+        return None
 
-# Función para generar el reporte en PDF
+# Función para generar el reporte en Word
 def generar_reporte(df1, df2, archivo_1, archivo_2):
-    pdf_pages = PdfPages(BytesIO())
+    # Crear documento Word
+    doc = Document()
     
-    # Generar gráficas para el primer archivo
-    generar_graficos(df1, archivo_1.name, pdf_pages)
-
-    # Generar gráficas para el segundo archivo
-    generar_graficos(df2, archivo_2.name, pdf_pages)
-
-    pdf_pages.close()
+    # Título del documento
+    doc.add_heading('Reporte de Análisis', 0)
     
-    return pdf_pages
+    # Gráfico para el primer archivo
+    img_stream_1 = generar_graficos(df1, archivo_1.name)
+    if img_stream_1:
+        doc.add_heading(f'Gráfico para {archivo_1.name}', level=1)
+        doc.add_picture(img_stream_1)
+    
+    # Gráfico para el segundo archivo
+    img_stream_2 = generar_graficos(df2, archivo_2.name)
+    if img_stream_2:
+        doc.add_heading(f'Gráfico para {archivo_2.name}', level=1)
+        doc.add_picture(img_stream_2)
+    
+    # Guardar el archivo Word
+    word_stream = BytesIO()
+    doc.save(word_stream)
+    word_stream.seek(0)
+    
+    return word_stream
 
 # Subir el primer archivo
-archivo_1 = st.file_uploader("Subir el primer archivo", type=["txt"])
+archivo_1 = st.file_uploader("Sube el primer archivo", type=["txt"])
 if archivo_1:
     df1 = analizar_datos(archivo_1)
     st.write("Primer archivo procesado con éxito.")
 
-# Subir el segundo archivo
-archivo_2 = st.file_uploader("Subir el segundo archivo", type=["txt"])
+# Subir el segundo archivo (igual al primero)
+archivo_2 = st.file_uploader("Sube el segundo archivo (igual al primero)", type=["txt"])
 if archivo_2:
     df2 = analizar_datos(archivo_2)
     st.write("Segundo archivo procesado con éxito.")
 
-# Si ambos archivos han sido cargados, generar el reporte y exportarlo
+# Si ambos archivos han sido subidos, generar el reporte y exportarlo
 if archivo_1 and archivo_2:
-    pdf = generar_reporte(df1, df2, archivo_1, archivo_2)
+    word_stream = generar_reporte(df1, df2, archivo_1, archivo_2)
     
     st.write("Reporte generado con éxito.")
     
-    # Descargar el reporte en formato PDF
+    # Descargar el reporte en formato Word
     st.download_button(
-        label="Descargar reporte en PDF",
-        data=pdf,
-        file_name="reporte_analisis.pdf",
-        mime="application/pdf"
+        label="Descargar reporte en Word",
+        data=word_stream,
+        file_name="reporte_analisis.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
