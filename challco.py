@@ -25,29 +25,23 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Función para leer y procesar el archivo (asegurarse que los archivos sean similares)
+# Función para leer el archivo y procesarlo
 def procesar_archivo(archivo):
-    # Leer el archivo (suponiendo que es un CSV)
-    df = pd.read_csv(archivo)
-    
-    # Aquí agregamos las mismas operaciones de procesamiento que tienes para el primer archivo
-    # por ejemplo, si haces algo como:
-    # df['Fecha'] = pd.to_datetime(df['Fecha'])
-    # y otras manipulaciones de datos
+    df = pd.read_csv(archivo)  # Manteniendo el formato CSV como en tu código original
     return df
 
 # Función para generar gráficos
 def generar_graficos(df, nombre_archivo):
-    st.write(f"Gráficos para {nombre_archivo}")
+    st.write(f"Generando gráficos para {nombre_archivo}")
     
-    # Ejemplo de gráfico: Gráfico de línea de alguna columna
+    # Ejemplo de gráficos que ya habías implementado
     fig, ax = plt.subplots()
     ax.plot(df['ColumnaX'], df['ColumnaY'])
     ax.set_title(f"Gráfico de {nombre_archivo}")
     ax.set_xlabel('ColumnaX')
     ax.set_ylabel('ColumnaY')
     st.pyplot(fig)
-    
+
 # Interfaz de Streamlit
 st.title('Carga de Archivos y Generación de Gráficos')
 
