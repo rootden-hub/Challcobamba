@@ -25,90 +25,57 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-
-# Función para analizar el archivo
-def analizar_datos(archivo):
-    # Aquí va tu lógica para procesar el archivo
-    df = pd.read_csv(archivo, delimiter="\t")  # Asegúrate de que este es el formato correcto
-    # Realiza el procesamiento adicional aquí si es necesario
-    return df
-
-# Función para generar los gráficos
-def generar_graficos(df, nombre_archivo):
-    # Crear figura y gráfico
-    fig, ax = plt.subplots()
+# Función para procesar y generar gráficos de un archivo
+def generar_graficos(df, archivo_nombre, pdf_pages):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(df['ColumnaX'], df['ColumnaY'])
+    ax.set_title(f'Gráfico para {archivo_nombre}')
+    ax.set_xlabel('Eje X')
+    ax.set_ylabel('Eje Y')
     
-    # Graficar solo si las columnas necesarias existen
-    if 'ColumnaX' in df.columns and 'ColumnaY' in df.columns:
-        ax.plot(df['ColumnaX'], df['ColumnaY'])
-        ax.set_title(f'Gráfica para {nombre_archivo}')
-        ax.set_xlabel('Eje X')
-        ax.set_ylabel('Eje Y')
-        
-        # Convertir el gráfico a imagen
-        canvas = FigureCanvas(fig)
-        img_stream = BytesIO()
-        canvas.print_png(img_stream)
-        img_stream.seek(0)
-        
-        return img_stream
-    else:
-        st.error(f"El archivo {nombre_archivo} no tiene las columnas 'ColumnaX' y 'ColumnaY'.")
-        return None
+    # Guardar gráfico en un archivo temporal o en memoria
+    img_stream = BytesIO()
+    plt.savefig(img_stream, format='png')
+    img_stream.seek(0)  # Reposicionar al inicio del archivo en memoria
+    
+    # Insertar gráfico en el documento Word
+    doc.add_paragraph(f"Gráfico generado para {archivo_nombre}")
+    doc.add_picture(img_stream)
 
-# Función para generar el reporte en Word
+# Función para generar el reporte Word
 def generar_reporte(df1, df2, archivo_1, archivo_2):
     # Crear documento Word
+    global doc
     doc = Document()
     
-    # Título del documento
-    doc.add_heading('Reporte de Análisis', 0)
+    # Generar gráficos para el primer archivo
+    generar_graficos(df1, archivo_1.name, None)
     
-    # Gráfico para el primer archivo
-    img_stream_1 = generar_graficos(df1, archivo_1.name)
-    if img_stream_1:
-        doc.add_heading(f'Gráfico para {archivo_1.name}', level=1)
-        doc.add_picture(img_stream_1)
+    # Generar gráficos para el segundo archivo
+    generar_graficos(df2, archivo_2.name, None)
     
-    # Gráfico para el segundo archivo
-    img_stream_2 = generar_graficos(df2, archivo_2.name)
-    if img_stream_2:
-        doc.add_heading(f'Gráfico para {archivo_2.name}', level=1)
-        doc.add_picture(img_stream_2)
-    
-    # Guardar el archivo Word
-    word_stream = BytesIO()
-    doc.save(word_stream)
-    word_stream.seek(0)
-    
-    return word_stream
+    # Guardar el documento Word
+    doc.save('reporte.docx')
+    return 'reporte.docx'
 
-# Subir el primer archivo
-archivo_1 = st.file_uploader("Sube el primer archivo", type=["txt"])
-if archivo_1:
-    df1 = analizar_datos(archivo_1)
-    st.write("Primer archivo procesado con éxito.")
+# Interfaz Streamlit
+st.title('Generador de Reportes')
 
-# Subir el segundo archivo (igual al primero)
-archivo_2 = st.file_uploader("Sube el segundo archivo (igual al primero)", type=["txt"])
-if archivo_2:
-    df2 = analizar_datos(archivo_2)
-    st.write("Segundo archivo procesado con éxito.")
+# Cargar los archivos
+archivo_1 = st.file_uploader("Subir el primer archivo TXT", type="txt")
+archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
 
-# Si ambos archivos han sido subidos, generar el reporte y exportarlo
+# Procesar los archivos si están cargados
 if archivo_1 and archivo_2:
-    word_stream = generar_reporte(df1, df2, archivo_1, archivo_2)
+    # Leer los archivos en DataFrame
+    df1 = pd.read_csv(archivo_1, delimiter='\t')  # Ajusta si es necesario
+    df2 = pd.read_csv(archivo_2, delimiter='\t')  # Ajusta si es necesario
     
-    st.write("Reporte generado con éxito.")
-    
-    # Descargar el reporte en formato Word
-    st.download_button(
-        label="Descargar reporte en Word",
-        data=word_stream,
-        file_name="reporte_analisis.docx",
-        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    )
+    # Generar reporte en Word
+    if st.button('Generar Reporte'):
+        reporte = generar_reporte(df1, df2, archivo_1, archivo_2)
+        st.success(f'Reporte generado: {reporte}')
+        st.download_button('Descargar Reporte', reporte)
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
