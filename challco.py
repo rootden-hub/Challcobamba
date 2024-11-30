@@ -25,65 +25,7 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Función original para procesar el archivo
-def procesar_archivo(archivo):
-    df = pd.read_csv(archivo, delimiter="\t")  # Ajusta según el formato del archivo original
-    return df
 
-# Función original para generar reportes en Word
-def generar_reporte(df, archivo_nombre, doc):
-    doc.add_heading(f"Reporte para {archivo_nombre}", level=1)
-
-    # Crear tabla en el documento Word
-    table = doc.add_table(rows=1, cols=len(df.columns))
-    hdr_cells = table.rows[0].cells
-    for i, col in enumerate(df.columns):
-        hdr_cells[i].text = col
-
-    for _, row in df.iterrows():
-        row_cells = table.add_row().cells
-        for i, value in enumerate(row):
-            row_cells[i].text = str(value)
-
-    doc.add_paragraph("\nGráficos e información adicional aquí.")  # Placeholder
-    doc.add_page_break()
-
-# Interfaz de Streamlit
-st.title("Generador de Reportes")
-
-# Subir el primer archivo
-archivo_1 = st.file_uploader("Sube el primer archivo TXT", type="txt")
-if archivo_1:
-    df1 = procesar_archivo(archivo_1)
-    st.write("Primer archivo procesado con éxito.")
-
-    # Subir el segundo archivo
-    archivo_2 = st.file_uploader("Sube el segundo archivo TXT (opcional)", type="txt")
-    if archivo_2:
-        df2 = procesar_archivo(archivo_2)
-        st.write("Segundo archivo procesado con éxito.")
-
-    # Botón para generar el reporte
-    if st.button("Generar Reporte"):
-        doc = Document()
-
-        # Generar el reporte para el primer archivo
-        generar_reporte(df1, archivo_1.name, doc)
-
-        # Generar el reporte para el segundo archivo, si se cargó
-        if archivo_2:
-            generar_reporte(df2, archivo_2.name, doc)
-
-        # Guardar y ofrecer descarga del reporte
-        reporte_path = "reporte.docx"
-        doc.save(reporte_path)
-        with open(reporte_path, "rb") as file:
-            st.download_button(
-                label="Descargar Reporte",
-                data=file,
-                file_name="reporte.docx",
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            )
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
@@ -599,6 +541,23 @@ def cargar_archivo():
     else:
         st.warning("Por favor, selecciona un archivo de texto (.txt)")
 
+    # Cargar el segundo archivo , se agrega al codigo original
+    archivo_2 = st.file_uploader("Selecciona el segundo archivo de texto (.txt)", type=["txt"], key="archivo_2")
+    
+    if archivo_2 is not None:
+        try:
+            # Leer el segundo archivo como DataFrame
+            df2 = pd.read_csv(archivo_2, sep='\t')
+            st.success(f"Archivo 2 cargado correctamente: {archivo_2.name}")
+            
+            # Mostrar los datos del segundo archivo
+            st.dataframe(df2)
+            
+        except Exception as e:
+            st.error(f"Ocurrió un error al leer el archivo 2: {e}")
+    else:
+        st.warning("Por favor, selecciona el segundo archivo de texto (.txt)")
+        
 # Mostrar el logo (asegúrate de tener el archivo en la ruta correcta)
 try:
     imagen = Image.open("images/logo.png")
