@@ -34,48 +34,48 @@ file1 = st.file_uploader("Selecciona el primer archivo de texto (.txt)", type=["
 # Solicitar el segundo archivo
 file2 = st.file_uploader("Selecciona el segundo archivo de texto (.txt)", type=["txt"])
 
-# Verificar si ambos archivos fueron cargados
-if file1 and file2:
-    # Cargar los archivos en DataFrames
-    df1 = pd.read_csv(file1, delimiter="\t")  # Ajusta según el delimitador de tu archivo
-    df2 = pd.read_csv(file2, delimiter="\t")  # Ajusta según el delimitador de tu archivo
+# Botón para generar el reporte
+if st.button("Generar Reporte"):
+    # Verificar si ambos archivos fueron cargados
+    if file1 and file2:
+        # Cargar los archivos en DataFrames
+        try:
+            df1 = pd.read_csv(file1, delimiter="\t")  # Ajusta según el delimitador de tu archivo
+            df2 = pd.read_csv(file2, delimiter="\t")  # Ajusta según el delimitador de tu archivo
+            
+            # Verificar las primeras filas de los DataFrames
+            st.write("Primer archivo (df1):")
+            st.write(df1.head())
 
-    # Verificar las primeras filas de los DataFrames
-    st.write("Primer archivo (df1):")
-    st.write(df1.head())
+            st.write("Segundo archivo (df2):")
+            st.write(df2.head())
 
-    st.write("Segundo archivo (df2):")
-    st.write(df2.head())
+            # Verificar los nombres de las columnas
+            if 'Fecha' in df1.columns and 'Valor' in df1.columns:
+                st.subheader("Gráficos para el Primer Archivo")
+                fig1, ax1 = plt.subplots()
+                ax1.plot(df1['Fecha'], df1['Valor'])  # Suponiendo que 'Fecha' y 'Valor' son las columnas
+                ax1.set_title("Gráfico del Primer Archivo")
+                ax1.set_xlabel("Fecha")
+                ax1.set_ylabel("Valor")
+                st.pyplot(fig1)
+            else:
+                st.error("El primer archivo no tiene las columnas 'Fecha' y 'Valor'.")
 
-    # Verificar los nombres de las columnas en el primer archivo
-    st.write("Columnas del primer archivo (df1):")
-    st.write(df1.columns)
-
-    # Generar los gráficos para el primer archivo
-    if 'Fecha' in df1.columns and 'Valor' in df1.columns:
-        st.subheader("Gráficos para el Primer Archivo")
-        fig1, ax1 = plt.subplots()
-        ax1.plot(df1['Fecha'], df1['Valor'])  # Suponiendo que 'Fecha' y 'Valor' son las columnas
-        ax1.set_title("Gráfico del Primer Archivo")
-        ax1.set_xlabel("Fecha")
-        ax1.set_ylabel("Valor")
-        st.pyplot(fig1)
+            if 'Fecha' in df2.columns and 'Valor' in df2.columns:
+                st.subheader("Gráficos para el Segundo Archivo")
+                fig2, ax2 = plt.subplots()
+                ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
+                ax2.set_title("Gráfico del Segundo Archivo")
+                ax2.set_xlabel("Fecha")
+                ax2.set_ylabel("Valor")
+                st.pyplot(fig2)
+            else:
+                st.error("El segundo archivo no tiene las columnas 'Fecha' y 'Valor'.")
+        except Exception as e:
+            st.error(f"Hubo un error al procesar los archivos: {e}")
     else:
-        st.write("El primer archivo no tiene las columnas 'Fecha' y 'Valor'.")
-    
-    # Generar los gráficos para el segundo archivo
-    if 'Fecha' in df2.columns and 'Valor' in df2.columns:
-        st.subheader("Gráficos para el Segundo Archivo")
-        fig2, ax2 = plt.subplots()
-        ax2.plot(df2['Fecha'], df2['Valor'])  # Lo mismo para el segundo archivo
-        ax2.set_title("Gráfico del Segundo Archivo")
-        ax2.set_xlabel("Fecha")
-        ax2.set_ylabel("Valor")
-        st.pyplot(fig2)
-    else:
-        st.write("El segundo archivo no tiene las columnas 'Fecha' y 'Valor'.")
-else:
-    st.warning("Por favor, carga ambos archivos para ver los gráficos.")
+        st.warning("Por favor, carga ambos archivos para generar el reporte.")
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
