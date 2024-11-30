@@ -25,19 +25,18 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Función para procesar y generar gráficos de un archivo
 def generar_graficos(df, archivo_nombre, pdf_pages):
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(df['ColumnaX'], df['ColumnaY'])
     ax.set_title(f'Gráfico para {archivo_nombre}')
     ax.set_xlabel('Eje X')
     ax.set_ylabel('Eje Y')
-    
+
     # Guardar gráfico en un archivo temporal o en memoria
     img_stream = BytesIO()
     plt.savefig(img_stream, format='png')
     img_stream.seek(0)  # Reposicionar al inicio del archivo en memoria
-    
+
     # Insertar gráfico en el documento Word
     doc.add_paragraph(f"Gráfico generado para {archivo_nombre}")
     doc.add_picture(img_stream)
@@ -61,10 +60,10 @@ def generar_reporte(df1, df2, archivo_1, archivo_2):
 # Interfaz Streamlit
 st.title('Generador de Reportes')
 
-# Aquí ya tenemos el primer archivo cargado como en el código original
+# Solicitar solo el primer archivo como en el código original
 archivo_1 = st.file_uploader("Subir el primer archivo TXT", type="txt")
 
-# Agregamos una opción para cargar el segundo archivo
+# Luego, agregar la opción para cargar el segundo archivo
 archivo_2 = st.file_uploader("Subir el segundo archivo TXT", type="txt")
 
 # Procesar los archivos si están cargados
