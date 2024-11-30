@@ -25,16 +25,19 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-# Función para leer el archivo y procesarlo
+from matplotlib.backends.backend_pdf import PdfPages
+
+# Función para leer el archivo .txt y procesarlo
 def procesar_archivo(archivo):
-    df = pd.read_csv(archivo)  # Manteniendo el formato CSV como en tu código original
+    # Leer el archivo .txt. Suponiendo que el archivo es tabulado o tiene delimitadores claros
+    df = pd.read_csv(archivo, delimiter="\t")  # Ajusta el delimitador según tu archivo
     return df
 
-# Función para generar gráficos
-def generar_graficos(df, nombre_archivo):
+# Función para generar gráficos y guardarlos en un archivo PDF
+def generar_graficos(df, nombre_archivo, pdf_pages):
     st.write(f"Generando gráficos para {nombre_archivo}")
     
-    # Ejemplo de gráficos que ya habías implementado
+    # Ejemplo de gráfico que ya tenías
     fig, ax = plt.subplots()
     ax.plot(df['ColumnaX'], df['ColumnaY'])
     ax.set_title(f"Gráfico de {nombre_archivo}")
@@ -42,20 +45,38 @@ def generar_graficos(df, nombre_archivo):
     ax.set_ylabel('ColumnaY')
     st.pyplot(fig)
 
+    # Guardar el gráfico en el archivo PDF
+    pdf_pages.savefig(fig)
+    plt.close(fig)
+
 # Interfaz de Streamlit
 st.title('Carga de Archivos y Generación de Gráficos')
 
-# Cargar el primer archivo
-archivo_1 = st.file_uploader("Sube el primer archivo CSV", type=["csv"])
+# Cargar el primer archivo .txt
+archivo_1 = st.file_uploader("Sube el primer archivo TXT", type=["txt"])
 if archivo_1:
     df1 = procesar_archivo(archivo_1)
-    generar_graficos(df1, "Primer archivo")
+    
+    # Generación de gráficos para el primer archivo
+    with PdfPages('graficos_output.pdf') as pdf_pages:
+        generar_graficos(df1, "Primer archivo", pdf_pages)
 
-# Cargar el segundo archivo
-archivo_2 = st.file_uploader("Sube el segundo archivo CSV", type=["csv"])
+    # Mostrar el archivo PDF generado para el primer archivo
+    st.write("Archivo PDF generado para el primer archivo.")
+
+# Cargar el segundo archivo .txt
+archivo_2 = st.file_uploader("Sube el segundo archivo TXT", type=["txt"])
 if archivo_2:
     df2 = procesar_archivo(archivo_2)
-    generar_graficos(df2, "Segundo archivo")
+    
+    # Generación de gráficos para el segundo archivo
+    with PdfPages('graficos_output.pdf') as pdf_pages:
+        generar_graficos(df2, "Segundo archivo", pdf_pages)
+
+    # Mostrar el archivo PDF generado para el segundo archivo
+    st.write("Archivo PDF generado para el segundo archivo.")
+
+
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
