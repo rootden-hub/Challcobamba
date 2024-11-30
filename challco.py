@@ -29,10 +29,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # Función para analizar y procesar el archivo
 def analizar_datos(archivo):
-    # Aquí debes tener la lógica que ya has implementado en tu código original
-    # Por ejemplo, leer el archivo y convertirlo a un DataFrame
-    df = pd.read_csv(archivo, delimiter="\t")  # Suponiendo que tu archivo es de tipo txt
-    # Realizar cualquier procesamiento o análisis aquí
+    # Asumimos que el archivo es un .txt y lo cargamos correctamente
+    df = pd.read_csv(archivo, delimiter="\t")  # Ajusta el delimitador si es necesario
     return df
 
 # Función para generar las gráficas de los datos
