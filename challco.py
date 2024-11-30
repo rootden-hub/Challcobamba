@@ -25,64 +25,65 @@ from docx import Document
 from io import BytesIO
 
 #NUEVO CODIGO
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-from docx import Document
-from io import BytesIO
+# Función original para procesar el archivo
+def procesar_archivo(archivo):
+    df = pd.read_csv(archivo, delimiter="\t")  # Ajusta según el formato del archivo original
+    return df
 
-# Función para generar gráficos
-def generar_graficos(df, archivo_nombre, pdf_pages):
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df['ColumnaX'], df['ColumnaY'])  # Asegúrate de que estas columnas existan
-    ax.set_title(f'Gráfico para {archivo_nombre}')
-    ax.set_xlabel('Eje X')
-    ax.set_ylabel('Eje Y')
+# Función original para generar reportes en Word
+def generar_reporte(df, archivo_nombre, doc):
+    doc.add_heading(f"Reporte para {archivo_nombre}", level=1)
 
-    # Guardar el gráfico en un archivo en memoria
-    img_stream = BytesIO()
-    plt.savefig(img_stream, format='png')
-    img_stream.seek(0)  # Reposicionar al inicio del archivo en memoria
+    # Crear tabla en el documento Word
+    table = doc.add_table(rows=1, cols=len(df.columns))
+    hdr_cells = table.rows[0].cells
+    for i, col in enumerate(df.columns):
+        hdr_cells[i].text = col
 
-    # Insertar gráfico en el documento Word
-    doc.add_paragraph(f"Gráfico generado para {archivo_nombre}")
-    doc.add_picture(img_stream)
+    for _, row in df.iterrows():
+        row_cells = table.add_row().cells
+        for i, value in enumerate(row):
+            row_cells[i].text = str(value)
 
-# Función para generar el reporte en Word
-def generar_reporte(df1, df2, archivo_1, archivo_2):
-    global doc
-    doc = Document()
-    
-    # Gráficos para el primer archivo
-    generar_graficos(df1, archivo_1.name, None)
-    
-    # Gráficos para el segundo archivo
-    generar_graficos(df2, archivo_2.name, None)
-    
-    # Guardar el documento Word
-    doc.save('reporte.docx')
-    return 'reporte.docx'
+    doc.add_paragraph("\nGráficos e información adicional aquí.")  # Placeholder
+    doc.add_page_break()
 
-# Cargar el primer archivo (como en el código original)
+# Interfaz de Streamlit
+st.title("Generador de Reportes")
+
+# Subir el primer archivo
 archivo_1 = st.file_uploader("Sube el primer archivo TXT", type="txt")
-
-# Si se ha cargado el primer archivo, cargar el segundo archivo
 if archivo_1:
-    # Leer el primer archivo en un DataFrame
-    df1 = pd.read_csv(archivo_1, delimiter='\t')  # O ajusta esto según el tipo de archivo y formato
+    df1 = procesar_archivo(archivo_1)
+    st.write("Primer archivo procesado con éxito.")
 
-    # Opción para cargar el segundo archivo después de cargar el primero
-    archivo_2 = st.file_uploader("Sube el segundo archivo TXT", type="txt")
-
+    # Subir el segundo archivo
+    archivo_2 = st.file_uploader("Sube el segundo archivo TXT (opcional)", type="txt")
     if archivo_2:
-        # Leer el segundo archivo
-        df2 = pd.read_csv(archivo_2, delimiter='\t')  # O ajusta esto según el tipo de archivo y formato
+        df2 = procesar_archivo(archivo_2)
+        st.write("Segundo archivo procesado con éxito.")
 
-        # Botón para generar el reporte con ambos archivos
-        if st.button('Generar Reporte'):
-            reporte = generar_reporte(df1, df2, archivo_1, archivo_2)
-            st.success(f'Reporte generado: {reporte}')
-            st.download_button('Descargar Reporte', reporte)
+    # Botón para generar el reporte
+    if st.button("Generar Reporte"):
+        doc = Document()
+
+        # Generar el reporte para el primer archivo
+        generar_reporte(df1, archivo_1.name, doc)
+
+        # Generar el reporte para el segundo archivo, si se cargó
+        if archivo_2:
+            generar_reporte(df2, archivo_2.name, doc)
+
+        # Guardar y ofrecer descarga del reporte
+        reporte_path = "reporte.docx"
+        doc.save(reporte_path)
+        with open(reporte_path, "rb") as file:
+            st.download_button(
+                label="Descargar Reporte",
+                data=file,
+                file_name="reporte.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
