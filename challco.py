@@ -27,61 +27,66 @@ from io import BytesIO
 #NUEVO CODIGO
 from matplotlib.backends.backend_pdf import PdfPages
 
-# Función para generar gráficos
+# Función para analizar y procesar el archivo
+def analizar_datos(archivo):
+    # Aquí debes tener la lógica que ya has implementado en tu código original
+    # Por ejemplo, leer el archivo y convertirlo a un DataFrame
+    df = pd.read_csv(archivo, delimiter="\t")  # Suponiendo que tu archivo es de tipo txt
+    # Realizar cualquier procesamiento o análisis aquí
+    return df
+
+# Función para generar las gráficas de los datos
 def generar_graficos(df, nombre_archivo, pdf_pages):
-    st.write(f"Generando gráficos para {nombre_archivo}")
-    
-    # Asegurarse de que la columna 'Start' sea del tipo datetime
-    df['Start'] = pd.to_datetime(df['Start'], format='%m/%d/%Y %I:%M %p')
-
-    # Convertir la columna 'Duration' a un valor numérico en minutos
-    def convertir_duracion(duracion):
-        if isinstance(duracion, str):
-            tiempo = duracion.lower().split()
-            minutos = 0
-            for t in tiempo:
-                if 'm' in t:
-                    minutos += int(t.replace('m', ''))
-                elif 'h' in t:
-                    minutos += int(t.replace('h', '')) * 60
-            return minutos
-        return 0
-
-    df['Duration_minutes'] = df['Duration'].apply(convertir_duracion)
-
-    # Generar el gráfico
+    # Crear las gráficas como en tu código original
     fig, ax = plt.subplots()
-    ax.plot(df['Start'], df['Duration_minutes'], label=f"Duración de {nombre_archivo}")
-    ax.set_title(f"Duración de eventos para {nombre_archivo}")
-    ax.set_xlabel('Hora de inicio')
-    ax.set_ylabel('Duración (minutos)')
-    ax.legend()
-    st.pyplot(fig)
+    ax.plot(df['ColumnaX'], df['ColumnaY'])
+    ax.set_title(f'Gráfica para {nombre_archivo}')
+    ax.set_xlabel('Eje X')
+    ax.set_ylabel('Eje Y')
 
-    # Guardar el gráfico en el archivo PDF
+    # Guardar la gráfica en el PDF
     pdf_pages.savefig(fig)
     plt.close(fig)
 
-# Crear el objeto PdfPages para exportar los gráficos
-pdf_pages = PdfPages("graficos_resultados.pdf")
+# Función para generar el reporte en PDF
+def generar_reporte(df1, df2, archivo_1, archivo_2):
+    pdf_pages = PdfPages(BytesIO())
+    
+    # Generar gráficas para el primer archivo
+    generar_graficos(df1, archivo_1.name, pdf_pages)
+
+    # Generar gráficas para el segundo archivo
+    generar_graficos(df2, archivo_2.name, pdf_pages)
+
+    pdf_pages.close()
+    
+    return pdf_pages
 
 # Subir el primer archivo
 archivo_1 = st.file_uploader("Subir el primer archivo", type=["txt"])
 if archivo_1:
-    df1 = pd.read_csv(archivo_1, delimiter="\t")
-    generar_graficos(df1, "Primer archivo", pdf_pages)
+    df1 = analizar_datos(archivo_1)
+    st.write("Primer archivo procesado con éxito.")
 
 # Subir el segundo archivo
 archivo_2 = st.file_uploader("Subir el segundo archivo", type=["txt"])
 if archivo_2:
-    df2 = pd.read_csv(archivo_2, delimiter="\t")
-    generar_graficos(df2, "Segundo archivo", pdf_pages)
+    df2 = analizar_datos(archivo_2)
+    st.write("Segundo archivo procesado con éxito.")
 
-# Cerrar el PDF y permitir la descarga
-pdf_pages.close()
-st.write("Los gráficos han sido generados y guardados en 'graficos_resultados.pdf'. Puedes descargarlo haciendo clic abajo.")
-st.download_button("Descargar PDF", "graficos_resultados.pdf", file_name="graficos_resultados.pdf")
-
+# Si ambos archivos han sido cargados, generar el reporte y exportarlo
+if archivo_1 and archivo_2:
+    pdf = generar_reporte(df1, df2, archivo_1, archivo_2)
+    
+    st.write("Reporte generado con éxito.")
+    
+    # Descargar el reporte en formato PDF
+    st.download_button(
+        label="Descargar reporte en PDF",
+        data=pdf,
+        file_name="reporte_analisis.pdf",
+        mime="application/pdf"
+    )
 #FIN DE NUEVO CODIGO
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
