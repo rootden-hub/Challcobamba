@@ -525,8 +525,8 @@ def plot_eventos(df2, report_date):
 #Paso 2: Crear la función que maneja todo el flujo
 #Luego, puedes crear una función principal que recibe el df2 y llama a las funciones anteriores, sin necesidad de duplicar el código:
 
-python
-Copy code
+#python
+#Copy code
 def process_and_generate_report(df2, file_name):
     # Obtenemos la fecha del reporte
     report_date = get_reporte_date(file_name)
