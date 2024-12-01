@@ -125,7 +125,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Aplicar la función para actualizar la columna 'Status'
     combined_df['Status'] = combined_df.apply(update_status, axis=1)
-    combined_df2['Status'] = combined_df2.apply(update_status, axis=1)
+   # combined_df2['Status'] = combined_df2.apply(update_status, axis=1)
 
     # Variables para las duraciones totales por tipo
     total_yellow_duration = pd.Timedelta(0)
