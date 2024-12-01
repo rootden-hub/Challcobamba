@@ -193,7 +193,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
                         fontsize=9, color='black', rotation=90)
 
     ax.set_yticks([])
-    ax.set_title(f'{report_date} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
+    ax.set_title(f'{report_date} - Sensores Challcobamba', fontsize=16, pad=20, loc='left')
 
     # Filtrar solo las alertas de interés para la leyenda
     legend_status = ['Red', 'Yellow', 'Grey']
@@ -284,7 +284,7 @@ def plot_eventos(df, report_date):
     # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Challcobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
@@ -461,7 +461,7 @@ def generate_report(df, file_name):
     header_table.columns[0].width = Pt(50)
 
     cell_logo = header_table.cell(0, 0)
-    cell_logo.paragraphs[0].add_run().add_picture("images/logo_doc.PNG", width=Pt(100))
+    cell_logo.paragraphs[0].add_run().add_picture("logo_doc.PNG", width=Pt(100))
 
     cell_title = header_table.cell(0, 1)
     header_table.cell(0, 1).width = Pt(1250)
@@ -541,14 +541,14 @@ def cargar_archivo():
 
 # Mostrar el logo (asegúrate de tener el archivo en la ruta correcta)
 try:
-    imagen = Image.open("images/logo.png")
+    imagen = Image.open("logo.png")
     imagen = imagen.resize((100, 50), Image.Resampling.LANCZOS)
     st.image(imagen, use_container_width=False)
 except FileNotFoundError:
     st.warning("No se encontró la imagen en la ruta especificada.")
 
 # Título largo de la app
-st.title("Generador de Reportes Diarios FERROBAMBA")
+st.title("Generador de Reportes Diarios CHALLCOBAMBA")
 
 
 # Llamar a la función para cargar el archivo
