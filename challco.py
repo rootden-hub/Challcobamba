@@ -125,7 +125,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Aplicar la función para actualizar la columna 'Status'
     combined_df['Status'] = combined_df.apply(update_status, axis=1)
-   # combined_df2['Status'] = combined_df2.apply(update_status, axis=1)
 
     # Variables para las duraciones totales por tipo
     total_yellow_duration = pd.Timedelta(0)
@@ -194,7 +193,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
                         fontsize=9, color='black', rotation=90)
 
     ax.set_yticks([])
-    ax.set_title(f'{report_date} - Sensores Mina', fontsize=16, pad=20, loc='left')
+    ax.set_title(f'{report_date} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
 
     # Filtrar solo las alertas de interés para la leyenda
     legend_status = ['Red', 'Yellow', 'Grey']
@@ -242,6 +241,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     return ax
 
+
 def plot_eventos(df, report_date):
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
@@ -284,7 +284,7 @@ def plot_eventos(df, report_date):
     # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensor 2 Mirador Evelyn', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
@@ -430,9 +430,7 @@ def generate_report(df, file_name):
     caution_df = description_dfs.get('Caution', pd.DataFrame())  # Si no existe, devuelve un DataFrame vacío
     alarm_df = description_dfs.get('Alarm', pd.DataFrame())  # Si no existe, devuelve un DataFrame vacío
     ax_1 = generate_daily_report(caution_df, alarm_df, report_date)  # Get ax object from the report function
-    ax_1 = generate_daily_report(caution_df2, alarm_df2, report_date)
     ax_2 = plot_eventos(df, report_date)
-    ax_2 = plot_eventos(df2, report_date)
 
     # Mostrar la primera gráfica en Streamlit
     st.subheader("Gráfica de Alertas por Día")
@@ -496,7 +494,7 @@ def generate_report(df, file_name):
 
     # Configurar el contenido del footer
     footer_paragraph.text = (
-        f"{today_date} Supervisión de Mantenimiento en Telecomunicaciones"
+        f"{today_date} Supervisión de Mantenimiento Eléctrico-Telecomunicaciones"
     )
     footer_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER  # Centrar el texto
 
@@ -515,8 +513,7 @@ def generate_report(df, file_name):
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
 
-#funcion de barrido
-
+    
 
 # Función para cargar y mostrar archivo
 def cargar_archivo():
@@ -536,28 +533,12 @@ def cargar_archivo():
             if st.button("Generar Reportes"):
                 st.write("Generando reportes...")
                 generate_report(df, archivo.name)
-                generate_report(df2, archivo.name)
         
         except Exception as e:
             st.error(f"Ocurrió un error al leer el archivo: {e}")
     else:
-        st.warning("Por favor, selecciona un archivo de texto para ferrobamba  (.txt)")
-# Cargar el segundo archivo , se agrega al codigo original
-    archivo_2 = st.file_uploader("Selecciona el segundo archivo de texto (.txt)", type=["txt"], key="archivo_2")
-    
-    if archivo_2 is not None:
-        try:
-            # Leer el segundo archivo como DataFrame
-            df2 = pd.read_csv(archivo_2, sep='\t')
-            st.success(f"Archivo 2 cargado correctamente: {archivo_2.name}")
-            
-            # Mostrar los datos del segundo archivo
-            st.dataframe(df2)
-            
-        except Exception as e:
-            st.error(f"Ocurrió un error al leer el archivo 2: {e}")
-    else:
-        st.warning("Por favor, selecciona el segundo archivo de texto para challcobamba (.txt)")
+        st.warning("Por favor, selecciona un archivo de texto (.txt)")
+
 # Mostrar el logo (asegúrate de tener el archivo en la ruta correcta)
 try:
     imagen = Image.open("images/logo.png")
@@ -567,7 +548,7 @@ except FileNotFoundError:
     st.warning("No se encontró la imagen en la ruta especificada.")
 
 # Título largo de la app
-st.title("Generador de Reportes Diarios de Alertas por Descargas Eléctricas Atmosféricas")
+st.title("Generador de Reportes Diarios FERROBAMBA")
 
 
 # Llamar a la función para cargar el archivo
