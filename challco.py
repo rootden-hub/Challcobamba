@@ -522,8 +522,8 @@ def generate_daily_report(caution_df2, alarm_df2, report_date):
 def plot_eventos(df2, report_date):
     # Utiliza `df2` para crear el gráfico de eventos
     pass
-Paso 2: Crear la función que maneja todo el flujo
-Luego, puedes crear una función principal que recibe el df2 y llama a las funciones anteriores, sin necesidad de duplicar el código:
+#Paso 2: Crear la función que maneja todo el flujo
+#Luego, puedes crear una función principal que recibe el df2 y llama a las funciones anteriores, sin necesidad de duplicar el código:
 
 python
 Copy code
