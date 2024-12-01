@@ -125,6 +125,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Aplicar la función para actualizar la columna 'Status'
     combined_df['Status'] = combined_df.apply(update_status, axis=1)
+    combined_df2['Status'] = combined_df2.apply(update_status, axis=1)
 
     # Variables para las duraciones totales por tipo
     total_yellow_duration = pd.Timedelta(0)
@@ -240,7 +241,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     plt.tight_layout()
 
     return ax
-
 
 def plot_eventos(df, report_date):
     # Conversión de fechas
@@ -430,7 +430,9 @@ def generate_report(df, file_name):
     caution_df = description_dfs.get('Caution', pd.DataFrame())  # Si no existe, devuelve un DataFrame vacío
     alarm_df = description_dfs.get('Alarm', pd.DataFrame())  # Si no existe, devuelve un DataFrame vacío
     ax_1 = generate_daily_report(caution_df, alarm_df, report_date)  # Get ax object from the report function
+    ax_1 = generate_daily_report(caution_df2, alarm_df2, report_date)
     ax_2 = plot_eventos(df, report_date)
+    ax_2 = plot_eventos(df2, report_date)
 
     # Mostrar la primera gráfica en Streamlit
     st.subheader("Gráfica de Alertas por Día")
@@ -534,6 +536,7 @@ def cargar_archivo():
             if st.button("Generar Reportes"):
                 st.write("Generando reportes...")
                 generate_report(df, archivo.name)
+                generate_report(df2, archivo.name)
         
         except Exception as e:
             st.error(f"Ocurrió un error al leer el archivo: {e}")
