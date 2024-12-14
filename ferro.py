@@ -100,7 +100,7 @@ combined_df = combined_df[
 # Validar si después del filtro hay datos
 if combined_df.empty:
     print(f"No hay datos en el rango {start_time_limit} a {end_time_limit}. No se generará el reporte.")
-    return None
+    return None  # Esto debe estar indentado correctamente dentro de la función
 
 
     # Crear columna de 'Duration' en formato min:segundos
