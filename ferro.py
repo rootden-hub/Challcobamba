@@ -88,6 +88,20 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     combined_df = combined_df.sort_values(by=['Date', 'Type_priority'], ascending=[True, True])
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
+# Establecer el rango de tiempo deseado
+start_time_limit = pd.Timestamp(report_date) + pd.Timedelta(hours=7)  # 7:00 AM del día actual
+end_time_limit = start_time_limit + pd.Timedelta(days=1)  # Hasta 7:00 AM del día siguiente
+
+# Filtrar las filas dentro del rango de tiempo
+combined_df = combined_df[
+    (combined_df['Date'] >= start_time_limit) & (combined_df['Date'] < end_time_limit)
+]
+
+# Validar si después del filtro hay datos
+if combined_df.empty:
+    print(f"No hay datos en el rango {start_time_limit} a {end_time_limit}. No se generará el reporte.")
+    return None
+
 
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
