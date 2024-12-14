@@ -97,12 +97,6 @@ combined_df = combined_df[
     (combined_df['Date'] >= start_time_limit) & (combined_df['Date'] < end_time_limit)
 ]
 
-# Validar si después del filtro hay datos
-if combined_df.empty:
-    print(f"No hay datos en el rango {start_time_limit} a {end_time_limit}. No se generará el reporte.")
-    return None  # Esto debe estar indentado correctamente dentro de la función
-
-
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
