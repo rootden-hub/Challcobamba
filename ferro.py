@@ -157,6 +157,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     fig, ax = plt.subplots(figsize=(15, 8))
 
     # Adjust x-axis limits to the specific day
+    #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
     start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
     end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
@@ -258,9 +259,15 @@ def plot_eventos(df, report_date):
     contador_tipo_2_y_3 = contador_tipo_2.add(contador_tipo_3, fill_value=0)
 
     # Crear un DataFrame con ambos conteos
-    conteos = pd.DataFrame({
-        'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
-        'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
+    #Se agega para modficar linea de tiempo-------------------------------------------------------------------------------------------------
+    horas = list(range(7, 24)) + list(range(0, 7))  # 7 AM a 7 AM
+     conteos = pd.DataFrame({
+    'Amarilla': contador_tipo_1.reindex(horas, fill_value=0),
+    'Roja': contador_tipo_2_y_3.reindex(horas, fill_value=0)
+    #----------------------------------------------------------------------------------------------------------
+    #conteos = pd.DataFrame({
+     #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
+      #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
     }).fillna(0)
 
     # Calcular el total, promedio y máximo para cada tipo de evento
