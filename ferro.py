@@ -93,9 +93,18 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
+    #Se agrega :obtener la primera fecha para usar como referencia  7am----------------------------------------------------------------------------------------------------------------------
+    first_event_time = combined_df.iloc[0]['Date']
+    reference_time = first_event_time.replace(hour=7, minute=0, second=0)
+    #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(combined_df) - 1):
         end_time = combined_df.iloc[i + 1]['Date']
         start_time = combined_df.iloc[i]['Date']
+    #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    # Si es el primer evento, ajustamos la duración con respecto a las 7:00 AM
+    if i == 0:
+        start_time = reference_time  # Ajustar al primer evento para que comience a las 7:00 AM
+    #---------------------------------------------------------------------------------------------------------------------------------
         duration = end_time - start_time
         durations.append(duration)
 
