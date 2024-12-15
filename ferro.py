@@ -80,21 +80,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
 
- # Obtener el primer evento
-    if not combined_df.empty:
-        first_event_time = combined_df.iloc[0]['Date']
-
-        # Crear un Timestamp para las 07:00 AM del mismo día
-        start_of_day = pd.Timestamp(first_event_time.date()) + pd.Timedelta(hours=7)
-
-        # Calcular la diferencia entre el primer evento y las 07:00 AM
-        if first_event_time < start_of_day:
-            first_free_duration = start_of_day - first_event_time
-        else:
-            first_free_duration = pd.Timedelta(0)  # Si el primer evento ocurre después de las 07:00 AM, no hay tiempo libre antes
-
-        # Agregar el primer tiempo libre como una columna
-        combined_df['First_Free_Time'] = first_free_duration
 
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
