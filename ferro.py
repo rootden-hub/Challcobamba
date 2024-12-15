@@ -109,8 +109,14 @@ def generate_daily_report(caution_df, alarm_df, report_date):
         durations.append(duration)
 
     # Añadir una fila vacía para la última duración (no hay un siguiente evento)
-    durations.append('')
+    durations.append(pd.Timedelta(0))  # Ajustar para que la longitud de 'durations' coincida
 
+    # Comprobar que la longitud de 'durations' coincida con la cantidad de filas
+    if len(durations) != len(combined_df):
+    # Si no coinciden, puedes ajustar la longitud de 'durations' para que coincida
+        durations = durations[:len(combined_df)]
+
+    # Agregar las duraciones al DataFrame
     combined_df['Duration'] = durations
 
 
