@@ -81,7 +81,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
 
  # Obtener el primer evento
-        if not combined_df.empty:
+    if not combined_df.empty:
         first_event_time = combined_df.iloc[0]['Date']
 
         # Crear un Timestamp para las 07:00 AM del mismo día
@@ -95,7 +95,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
         # Agregar el primer tiempo libre como una columna
         combined_df['First_Free_Time'] = first_free_duration
-
 
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
