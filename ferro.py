@@ -80,6 +80,10 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
 
+     # Asegurarse de que las fechas comiencen desde las 07:00 AM para todos los eventos
+    if not combined_df.empty:
+        combined_df['Date'] = combined_df['Date'].apply(lambda x: x.replace(hour=7, minute=0, second=0))
+
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
 
