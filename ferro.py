@@ -420,7 +420,8 @@ def generate_report(df, file_name):
             ], ignore_index=True)
 
             # Obtener la fecha del último registro y sumar un día para establecer la hora 00:00
-            last_date = pd.to_datetime(reorganized_df['Date'].iloc[-1]).normalize() + timedelta(days=1)
+            last_date = pd.to_datetime(reorganized_df['Date'].iloc[-1]).normalize() + timedelta(days=1)+ pd.Timedelta(hours=7)
+
             start_of_next_day = last_date.strftime('%m/%d/%y %H:%M %p')
 
             # Crear un registro al final
