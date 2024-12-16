@@ -159,7 +159,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Adjust x-axis limits to the specific day
     #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
-    start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
+    start_date = combined_df['Date'].min().normalize()
     end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
 
@@ -195,13 +195,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
             else:
                 ax.text(start + row['Duration'] / 2, 0, duration_text, ha='center',
                         fontsize=9, color='black', rotation=90)
-            # Añadir texto verticalmente centrado o hacia abajo para barras grises
-            if color in ['grey']:  # Verifica si la barra es gris
-                ax.text(start + row['Duration'] / 2, -0.3, duration_text, ha='center',
-                        fontsize=9, color='black', rotation=90)
-            else:
-                ax.text(start + row['Duration'] / 2, 0, duration_text, ha='center',
-                        fontsize=9, color='black', rotation=90)
+           
                 
     ax.set_yticks([])
     ax.set_title(f'{report_date} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
