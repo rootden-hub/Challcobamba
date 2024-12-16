@@ -404,7 +404,8 @@ def generate_report(df, file_name):
             reorganized_df = pd.DataFrame(reorganized_data)
 
             # Obtener la fecha del primer registro y establecer la hora 00:00
-            first_date = pd.to_datetime(reorganized_df['Date'].iloc[0]).normalize()
+            first_date = pd.to_datetime(reorganized_df['Date'].iloc[0]).normalize()+ pd.Timedelta(hours=7)
+
             start_of_day = first_date.strftime('%m/%d/%y %H:%M %p')
 
             # Crear un registro al inicio
