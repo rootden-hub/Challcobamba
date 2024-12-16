@@ -92,7 +92,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
-        end_time = combined_df.iloc[i + 1]['Date'] 
+        end_time = combined_df.iloc[i + 1]['Date'] + timedelta(hours=7)
         start_time = combined_df.iloc[i]['Date']+ timedelta(hours=7)
         duration = end_time - start_time
         durations.append(duration)
