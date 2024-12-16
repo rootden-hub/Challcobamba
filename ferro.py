@@ -306,7 +306,7 @@ def plot_eventos(df, report_date):
     ax.set_ylabel('Eventos')
     # Sumar un día a report_date
     next_day = report_date + pd.Timedelta(days=1)
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date.strftime("%d de %B del %Y")} al día {next_day.strftime("%d de %B del %Y")}\nsensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date.date()} al día {next_day.date()}\nsensores Ferrobamba', fontsize=16, pad=20)
     # Rango de etiquetas: 07:00 a 07:00 del día siguiente
     horas = [f'{(h % 24):02d}:00' for h in range(7, 31)]  # 7 a 30, ajustando al formato de 24 horas
     x_ticks = range(len(horas))  # Posiciones en el eje X
