@@ -87,8 +87,9 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     combined_df = combined_df.sort_values(by='Date', ascending=True)
 
     # Ajustar el rango de Date para que el día empiece a las 7:00 AM
+    combined_df['Date'] = pd.to_datetime(combined_df['Date'])  # Asegurarse de que sea datetime
     combined_df['Date'] = combined_df['Date'] - pd.Timedelta(hours=7)  # Retroceder 7 horas
-    combined_df['Date'] = combined_df['Date'].dt.date + pd.Timedelta(hours=7)  # Fijar a las 7:00 AM
+    combined_df['Date'] = combined_df['Date'].dt.floor('D') + pd.Timedelta(hours=7)  # Fijar a las 7:00 AM
 
     # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
     combined_df['Type_priority'] = combined_df['Type'].apply(lambda x: 0 if x == 'Start' else 1)
