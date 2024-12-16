@@ -301,24 +301,14 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 
-    # Etiquetas y título
+   # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-   
-    horas = [f'{(h % 24):02d}:00' for h in range(7, 31)]  # 7 a 30, ajustando al formato de 24 horas
-    x_ticks = range(len(horas))  # Posiciones en el eje X
-    # Configuración de las marcas y etiquetas del eje X
-    ax.set_xticks(x_ticks)  # Configurar las posiciones de las marcas
-    ax.set_xticklabels(horas)  # Establecer las etiquetas correspondientes
-    #ax.set_xticks(x)
-    #ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
-    # Configuración del título con la suma de un día al segundo report_date
-    ax.set_title(
-    f'Frecuencia de descargas eléctricas por hora del día {report_date} '
-    f'al {(pd.to_datetime(report_date, format="%d de %B del %Y") + pd.Timedelta(days=1)).strftime("%d de %B del %Y")}\n'
-    f'SENSORES FERROBAMBA',
-    fontsize=16, pad=20
-    )
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {formatted_date}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_xticks(x)
+    ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
+
+
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
 
