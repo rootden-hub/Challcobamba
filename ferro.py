@@ -81,11 +81,13 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     def ajustar_a_las_7_am(fecha):
         if pd.isnull(fecha):  # Asegurarse de que la fecha no sea inválida
             return pd.NaT  # Retorna un valor nulo si la fecha es inválida
-        inicio_dia = fecha.replace(hour=7, minute=0, second=0, microsecond=0)
-        if fecha < inicio_dia:
-            # Si la hora es antes de las 7:00 AM, tomar como referencia el día anterior
-            inicio_dia -= timedelta(days=1)
-        return inicio_dia
+        if isinstance(fecha, pd.Timestamp):  # Asegurarse de que 'fecha' es un objeto datetime
+            inicio_dia = fecha.replace(hour=7, minute=0, second=0, microsecond=0)
+            if fecha < inicio_dia:
+                # Si la hora es antes de las 7:00 AM, tomar como referencia el día anterior
+                inicio_dia -= timedelta(days=1)
+            return inicio_dia
+        return pd.NaT  # En caso de que 'fecha' no sea válida, devolver NaT
 
     # Crear una columna de referencia para los cálculos desde las 7:00 AM
     if not caution_df.empty:
