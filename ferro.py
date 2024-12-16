@@ -71,20 +71,23 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     if not caution_df.empty and not alarm_df.empty:
         caution_df = caution_df.iloc[1:-1]
 
-    # Convert 'Date' to datetime for easier manipulation solo si no están vacíos
+    # Convertir 'Date' a datetime para una manipulación más sencilla
     if not caution_df.empty:
-        caution_df['Date'] = pd.to_datetime(caution_df['Date'])
+        caution_df['Date'] = pd.to_datetime(caution_df['Date'], errors='coerce')
     if not alarm_df.empty:
-        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])
-      # Ajustar las fechas a las 7:00 AM--------SE AGREGA
+        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'], errors='coerce')
+    
+    # Ajustar las fechas a las 7:00 AM
     def ajustar_a_las_7_am(fecha):
+        if pd.isnull(fecha):  # Asegurarse de que la fecha no sea inválida
+            return pd.NaT  # Retorna un valor nulo si la fecha es inválida
         inicio_dia = fecha.replace(hour=7, minute=0, second=0, microsecond=0)
         if fecha < inicio_dia:
             # Si la hora es antes de las 7:00 AM, tomar como referencia el día anterior
             inicio_dia -= timedelta(days=1)
         return inicio_dia
 
-    # Crear una columna de referencia para los cálculos desde las 7:00 AM SE AGREGA
+    # Crear una columna de referencia para los cálculos desde las 7:00 AM
     if not caution_df.empty:
         caution_df['Referencia_7AM'] = caution_df['Date'].apply(ajustar_a_las_7_am)
     if not alarm_df.empty:
@@ -93,18 +96,12 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
 
-
-    # Ordenar las filas por la columna 'Date'
-    combined_df = combined_df.sort_values(by='Date', ascending=True)
-
-    # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
+    # Ordenar las filas por la columna 'Referencia_7AM' y, si hay fechas iguales, por 'Type'
     combined_df['Type_priority'] = combined_df['Type'].apply(lambda x: 0 if x == 'Start' else 1)
     combined_df = combined_df.sort_values(by=['Referencia_7AM', 'Type_priority'], ascending=[True, True])
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
-
-
-  # Crear columna de 'Duration' en formato min:segundos
+    # Calcular la duración basada en 'Referencia_7AM'
     durations = []
     for i in range(len(combined_df) - 1):
         end_time = combined_df.iloc[i + 1]['Referencia_7AM']
@@ -116,7 +113,8 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     durations.append('')
 
     combined_df['Duration'] = durations
-     # Filtrar eventos que pertenezcan únicamente al rango de 7:00 AM a 7:00 AM del día reportado
+
+    # Filtrar eventos que pertenezcan únicamente al rango de 7:00 AM a 7:00 AM del día reportado
     start_of_range = report_date.replace(hour=7, minute=0, second=0, microsecond=0)
     end_of_range = start_of_range + timedelta(days=1)
 
