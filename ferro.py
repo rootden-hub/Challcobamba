@@ -159,7 +159,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Adjust x-axis limits to the specific day
     #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
     start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
-    end_date = start_date + pd.Timedelta(days=1)+ pd.Timedelta(hours=7)
+    end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
 
     # Set x-axis ticks every 2 hours
