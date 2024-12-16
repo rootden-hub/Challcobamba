@@ -79,8 +79,10 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
+    
     # Ajustar las fechas sumando 7 horas
-    combined_df['Date'] = combined_df['Date'] + pd.Timedelta(hours=7)
+    #combined_df['Date'] = combined_df['Date'] + pd.Timedelta(hours=7)
+    
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
 
@@ -159,7 +161,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Adjust x-axis limits to the specific day
     #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
-    start_date = combined_df['Date'].min().normalize()
+    start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
     end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
 
