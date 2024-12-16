@@ -76,17 +76,20 @@ def generate_daily_report(caution_df, alarm_df, report_date):
         caution_df['Date'] = pd.to_datetime(caution_df['Date'])
     if not alarm_df.empty:
         alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])
-
-    # Generar referencia a las 7:00 AM del mismo día
+      # Ajustar las fechas a las 7:00 AM--------SE AGREGA
     def ajustar_a_las_7_am(fecha):
-        return fecha.replace(hour=7, minute=0, second=0, microsecond=0)
+        inicio_dia = fecha.replace(hour=7, minute=0, second=0, microsecond=0)
+        if fecha < inicio_dia:
+            # Si la hora es antes de las 7:00 AM, tomar como referencia el día anterior
+            inicio_dia -= timedelta(days=1)
+        return inicio_dia
 
+    # Crear una columna de referencia para los cálculos desde las 7:00 AM SE AGREGA
     if not caution_df.empty:
         caution_df['Referencia_7AM'] = caution_df['Date'].apply(ajustar_a_las_7_am)
-
     if not alarm_df.empty:
         alarm_df['Referencia_7AM'] = alarm_df['Date'].apply(ajustar_a_las_7_am)
-    
+
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
 
