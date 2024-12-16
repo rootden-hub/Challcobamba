@@ -304,16 +304,7 @@ def plot_eventos(df, report_date):
     # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-   # Convertir report_date a datetime con formato específico
-    report_date_dt = pd.to_datetime(report_date, format='%d de %B del %Y', dayfirst=True)
-
-    # Sumar un día y formatear la fecha
-    next_date = (report_date_dt + pd.Timedelta(days=1)).strftime('%d de %B del %Y')
-
-    # Actualizar el título
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date} al día {next_date}\nsensores Ferrobamba', 
-             fontsize=16, pad=20)
-    # Rango de etiquetas: 07:00 a 07:00 del día siguiente
+   
     horas = [f'{(h % 24):02d}:00' for h in range(7, 31)]  # 7 a 30, ajustando al formato de 24 horas
     x_ticks = range(len(horas))  # Posiciones en el eje X
     # Configuración de las marcas y etiquetas del eje X
@@ -321,7 +312,7 @@ def plot_eventos(df, report_date):
     ax.set_xticklabels(horas)  # Establecer las etiquetas correspondientes
     #ax.set_xticks(x)
     #ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
-
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date} al {report_date}\n sensores ferrorobamba', fontsize=16, pad=20)
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
 
