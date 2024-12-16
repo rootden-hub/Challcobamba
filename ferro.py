@@ -178,7 +178,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     ax.set_xlim(start_date, end_date)
 
     # Set x-axis ticks every 2 hours
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
 
     # Remove x-axis label
@@ -500,7 +500,7 @@ def generate_report(df, file_name):
     title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
     subtitle_paragraph = cell_title.add_paragraph(
-        f"De: {report_date} 00:00 horas\tA: {report_date} 23:59 horas"
+        f"De: {report_date} 07:00 horas\tA: {report_date} 07:00 horas"
     )
     subtitle_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
