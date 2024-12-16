@@ -73,9 +73,9 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Convert 'Date' to datetime for easier manipulation solo si no están vacíos
     if not caution_df.empty:
-        caution_df['Date'] = pd.to_datetime(caution_df['Date'])+ timedelta(hours=7)
+        caution_df['Date'] = pd.to_datetime(caution_df['Date'])+ timedelta(hours=0.01)
     if not alarm_df.empty:
-        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])+ timedelta(hours=7)
+        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])+ timedelta(hours=0.01)
 
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
