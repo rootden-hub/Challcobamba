@@ -318,6 +318,7 @@ def plot_eventos(df, report_date):
     f'al {(pd.to_datetime(report_date, format="%d de %B del %Y") + pd.Timedelta(days=1)).strftime("%d de %B del %Y")}\n'
     f'SENSORES FERROBAMBA',
     fontsize=16, pad=20
+    )
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
 
