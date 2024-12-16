@@ -76,6 +76,12 @@ def generate_daily_report(caution_df, alarm_df, report_date):
         caution_df['Date'] = pd.to_datetime(caution_df['Date'], errors='coerce')
     if not alarm_df.empty:
         alarm_df['Date'] = pd.to_datetime(alarm_df['Date'], errors='coerce')
+
+    # Verificar si hay valores NaT (not a time) después de la conversión
+    if caution_df['Date'].isnull().any():
+        print("Hay valores NaT en 'caution_df' después de la conversión a datetime.")
+    if alarm_df['Date'].isnull().any():
+        print("Hay valores NaT en 'alarm_df' después de la conversión a datetime.")
     
     # Ajustar las fechas a las 7:00 AM
     def ajustar_a_las_7_am(fecha):
@@ -126,7 +132,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     ]
 
     return combined_df
-
 
     # Actualizar la columna 'Status' según las nuevas reglas definidas
     def update_status(row):
