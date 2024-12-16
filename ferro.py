@@ -79,7 +79,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Generar referencia a las 7:00 AM del mismo día
     def ajustar_a_las_7_am(fecha):
-    return fecha.replace(hour=7, minute=0, second=0, microsecond=0)
+        return fecha.replace(hour=7, minute=0, second=0, microsecond=0)
 
     if not caution_df.empty:
         caution_df['Referencia_7AM'] = caution_df['Date'].apply(ajustar_a_las_7_am)
