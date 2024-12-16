@@ -116,7 +116,16 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     durations.append('')
 
     combined_df['Duration'] = durations
+     # Filtrar eventos que pertenezcan únicamente al rango de 7:00 AM a 7:00 AM del día reportado
+    start_of_range = report_date.replace(hour=7, minute=0, second=0, microsecond=0)
+    end_of_range = start_of_range + timedelta(days=1)
 
+    combined_df = combined_df[
+        (combined_df['Referencia_7AM'] >= start_of_range) & 
+        (combined_df['Referencia_7AM'] < end_of_range)
+    ]
+
+    return combined_df
 
 
     # Actualizar la columna 'Status' según las nuevas reglas definidas
