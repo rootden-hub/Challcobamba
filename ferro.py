@@ -73,9 +73,9 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Convert 'Date' to datetime for easier manipulation solo si no están vacíos
     if not caution_df.empty:
-        caution_df['Date'] = pd.to_datetime(caution_df['Date'])+ timedelta(hours=7)
+        caution_df['Date'] = pd.to_datetime(caution_df['Date'])
     if not alarm_df.empty:
-        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])+ timedelta(hours=7)
+        alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])
 
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
@@ -92,7 +92,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
-        end_time = combined_df.iloc[i + 1]['Date']
+        end_time = combined_df.iloc[i + 1]['Date'] + timedelta(hours=7)
         start_time = combined_df.iloc[i]['Date']
         duration = end_time - start_time
         durations.append(duration)
