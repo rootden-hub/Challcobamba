@@ -77,8 +77,16 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     if not alarm_df.empty:
         alarm_df['Date'] = pd.to_datetime(alarm_df['Date'])
 
+    # **Aquí ajustamos todas las fechas a las 7:00 AM**
+    if not caution_df.empty:
+        caution_df['Date'] = caution_df['Date'].apply(lambda x: x.replace(hour=7, minute=0, second=0, microsecond=0))
+    if not alarm_df.empty:
+        alarm_df['Date'] = alarm_df['Date'].apply(lambda x: x.replace(hour=7, minute=0, second=0, microsecond=0))
+
+    
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
+
 
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
@@ -89,7 +97,8 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
 
-    # Crear columna de 'Duration' en formato min:segundos
+
+  # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
         end_time = combined_df.iloc[i + 1]['Date']
@@ -101,6 +110,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     durations.append('')
 
     combined_df['Duration'] = durations
+
 
 
     # Actualizar la columna 'Status' según las nuevas reglas definidas
@@ -155,12 +165,13 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     fig, ax = plt.subplots(figsize=(15, 8))
 
     # Adjust x-axis limits to the specific day
-    start_date = combined_df['Date'].min().normalize()
+    #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
+    start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
     end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
 
     # Set x-axis ticks every 2 hours
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=1))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
 
     # Remove x-axis label
@@ -256,9 +267,15 @@ def plot_eventos(df, report_date):
     contador_tipo_2_y_3 = contador_tipo_2.add(contador_tipo_3, fill_value=0)
 
     # Crear un DataFrame con ambos conteos
+    #Se agega para modficar linea de tiempo-------------------------------------------------------------------------------------------------
+    horas = list(range(7, 24)) + list(range(0, 7))  # 7 AM a 7 AM
     conteos = pd.DataFrame({
-        'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
-        'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
+        'Amarilla': contador_tipo_1.reindex(horas, fill_value=0),
+        'Roja': contador_tipo_2_y_3.reindex(horas, fill_value=0)
+    #----------------------------------------------------------------------------------------------------------
+    #conteos = pd.DataFrame({
+     #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
+      #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
     }).fillna(0)
 
     # Calcular el total, promedio y máximo para cada tipo de evento
@@ -285,8 +302,14 @@ def plot_eventos(df, report_date):
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
     ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
-    ax.set_xticks(x)
-    ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
+    # Rango de etiquetas: 07:00 a 07:00 del día siguiente
+    horas = [f'{(h % 24):02d}:00' for h in range(7, 31)]  # 7 a 30, ajustando al formato de 24 horas
+    x_ticks = range(len(horas))  # Posiciones en el eje X
+    # Configuración de las marcas y etiquetas del eje X
+    ax.set_xticks(x_ticks)  # Configurar las posiciones de las marcas
+    ax.set_xticklabels(horas)  # Establecer las etiquetas correspondientes
+    #ax.set_xticks(x)
+    #ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
@@ -470,7 +493,7 @@ def generate_report(df, file_name):
     title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
     subtitle_paragraph = cell_title.add_paragraph(
-        f"De: {report_date} 00:00 horas\tA: {report_date} 23:59 horas"
+        f"De: {report_date} 07:00 horas\tA: {report_date} 07:00 horas"
     )
     subtitle_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
