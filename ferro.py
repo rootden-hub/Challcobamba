@@ -99,7 +99,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
     combined_df['Type_priority'] = combined_df['Type'].apply(lambda x: 0 if x == 'Start' else 1)
-    combined_df = combined_df.sort_values(by=['Date', 'Type_priority'], ascending=[True, True])
+    combined_df = combined_df.sort_values(by=['Referencia_7AM', 'Type_priority'], ascending=[True, True])
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
 
@@ -107,8 +107,8 @@ def generate_daily_report(caution_df, alarm_df, report_date):
   # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
-        end_time = combined_df.iloc[i + 1]['Date']
-        start_time = combined_df.iloc[i]['Date']
+        end_time = combined_df.iloc[i + 1]['Referencia_7AM']
+        start_time = combined_df.iloc[i]['Referencia_7AM']
         duration = end_time - start_time
         durations.append(duration)
 
