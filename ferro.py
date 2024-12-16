@@ -83,10 +83,8 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
 
-       #---------------------------Asegúrate de que tu DataFrame 'combined_df' tenga las fechas correctamente formateadas
-    combined_df['Date'] = pd.to_datetime(combined_df['Date'])
-
-    # Paso 1: Crear una columna temporal para ajustar el rango de 07:00 AM a 07:00 AM
+    #-------------# Paso 1: Crear una columna temporal para ajustar el rango de 07:00 AM a 07:00 AM
+    # Se ajusta el inicio de cada día a las 07:00 AM
     combined_df['Date_Adjusted'] = combined_df['Date'].apply(lambda x: x.replace(hour=7, minute=0, second=0, microsecond=0))
 
     # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
