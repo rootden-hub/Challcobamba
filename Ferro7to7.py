@@ -50,34 +50,7 @@ def get_reporte_date(file_path):
     
     return formatted_date
     
-def get_and_increment_date(file_path):
-    # Obtener solo el nombre del archivo
-    file_name = file_path.split("/")[-1]
-    
-    # Buscar el patrón de fecha en formato 'DD MM YY'
-    date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
-    
-    if date_match:
-        # Extraer día, mes y año
-        day = date_match.group(1)
-        month = date_match.group(2)
-        year = "20" + date_match.group(3)  # Suponiendo que el año es del 2000 en adelante
-        
-        # Crear la fecha en formato 'DD-MM-YYYY'
-        date_str = f"{day}-{month}-{year}"
-        
-        # Convertir la fecha en un objeto datetime
-        current_date = datetime.strptime(date_str, "%d-%m-%Y")
-        
-        # Sumar un día a la fecha
-        incremented_date = current_date + timedelta(days=1)
-        
-        # Convertir la fecha incrementada nuevamente a formato string 'DD-MM-YYYY'
-        incremented_date_str = incremented_date.strftime("%d-%m-%Y")
-        
-        return date_str, incremented_date_str
-    else:
-        return None, None
+
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
