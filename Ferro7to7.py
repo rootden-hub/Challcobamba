@@ -50,7 +50,7 @@ def get_reporte_date(file_path):
     
     return formatted_date
     
-def get_and_increment_date(file_path):
+def get_and_increment_date_simple(file_path):
     # Obtener solo el nombre del archivo
     file_name = file_path.split("/")[-1]
     
@@ -72,7 +72,8 @@ def get_and_increment_date(file_path):
         # Sumar un día a la fecha
         incremented_date = current_date + timedelta(days=1)
         
-        # Convertir la fecha incrementada nuevamente a formato string 'DD-MM-YYYY'
+        # Convertir las fechas a formato string 'DD-MM-YYYY'
+        date_str = current_date.strftime("%d-%m-%Y")
         incremented_date_str = incremented_date.strftime("%d-%m-%Y")
         
         return date_str, incremented_date_str
@@ -336,6 +337,7 @@ def plot_eventos(df, report_date):
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
+    date_str, incremented_date_str = get_and_increment_date_simple(file_name)
     ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {date_str}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
