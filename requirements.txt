@@ -6,4 +6,3 @@ numpy
 python-docx
 setuptools
 seaborn
-locale
