@@ -311,27 +311,7 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 #----------------------------------------------------------------------
-    # Reemplazar manualmente los nombres de los meses a números
-    report_date = report_date.replace("diciembre", "12").replace("noviembre", "11").replace("octubre", "10").replace("septiembre", "09").replace("agosto", "08").replace("julio", "07").replace("junio", "06").replace("mayo", "05").replace("abril", "04").replace("marzo", "03").replace("febrero", "02").replace("enero", "01")
-
-    # Eliminar espacios adicionales si hay alguno
-report_date = report_date.strip()
-
-# Verificar que el formato sea correcto
-try:
-    # Convertir la cadena a un objeto datetime
-    report_date_dt = datetime.strptime(report_date, "%d de %B del %Y")
     
-    # Sumar un día
-    report_date_plus_one = report_date_dt + timedelta(days=1)
-    
-    # Imprimir las fechas
-    print(f"De: {report_date_dt.strftime('%d de %B del %Y')} 00:00 horas\t"
-          f"A: {report_date_plus_one.strftime('%d de %B del %Y')} 23:59 horas")
-    
-except ValueError as e:
-    print(f"Error al analizar la fecha: {e}")
-
 
     
    # Etiquetas y título
