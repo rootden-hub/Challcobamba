@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import re
-import locale
 
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.section import WD_ORIENT
