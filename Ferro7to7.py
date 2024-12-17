@@ -331,13 +331,13 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 #----------------------------------------------------------------------
-    
-
+    def generate_repor2t(df, file_name):
+    date_str, incremented_date_str = get_and_increment_date_simple(file_name)
 
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-    date_str, incremented_date_str = get_and_increment_date_simple(file_name)
+    
     ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {date_str}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
