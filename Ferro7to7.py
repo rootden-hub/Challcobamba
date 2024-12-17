@@ -51,6 +51,18 @@ def get_reporte_date(file_path):
         formatted_date = None
     
     return formatted_date
+    
+def sumarle_un_dia(fecha_str):
+    # Convertir la fecha en formato 'DD de MM del YYYY' a un objeto datetime
+    fecha = datetime.strptime(fecha_str, "%d de %B del %Y")
+    
+    # Sumar un día
+    nueva_fecha = fecha + timedelta(days=1)
+    
+    # Formatear la nueva fecha como 'DD de MM del YYYY'
+    return nueva_fecha.strftime("%d de %B del %Y")
+
+
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
