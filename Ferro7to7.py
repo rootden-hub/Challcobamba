@@ -57,8 +57,23 @@ def sumar_un_dia(file_path):
     formatted_date = get_reporte_date(file_path)
     
     if formatted_date:
-        # Convertir la fecha extraída al formato datetime
-        fecha = datetime.strptime(formatted_date, "%d de %B del %Y")
+        # Separar la fecha en partes
+        parts = formatted_date.split(" de ")
+        day = int(parts[0])
+        month_name = parts[1]
+        year = int(parts[2].split(" ")[0])
+        
+        # Mapeo local del mes en español a su número
+        months_map = {
+            "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
+            "julio": 7, "agosto": 8, "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
+        }
+        
+        # Obtener el número del mes a partir del nombre
+        month = months_map[month_name]
+        
+        # Crear la fecha en formato datetime
+        fecha = datetime(year, month, day)
         
         # Sumar un día a la fecha
         nueva_fecha = fecha + timedelta(days=1)
