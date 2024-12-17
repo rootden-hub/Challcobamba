@@ -61,7 +61,6 @@ def format_duration(td):
         return f"{hours:02d}:{minutes:02d}"
     return "00:00"  # En caso de que el valor no sea un Timedelta
 
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 def generate_daily_report(caution_df, alarm_df, report_date):
     # Verificar si los DataFrames están vacíos antes de continuar
