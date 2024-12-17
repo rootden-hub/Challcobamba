@@ -22,7 +22,6 @@ from docx.shared import Pt
 from docx import Document
 from io import BytesIO
 
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 # ****************** Extraer la fecha del nombre del archivo
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
