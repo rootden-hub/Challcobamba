@@ -304,17 +304,14 @@ def plot_eventos(df, report_date):
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-        ax.set_title(
-        f'Frecuencia de descargas eléctricas del {formatted_date} al {formatted_next_date}\nSensores Ferrobamba',
-        fontsize=16, pad=20
+ 
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
 
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
-    file_path = "/ruta/al/archivo/12 12 20_reporte.txt"
-    formatted_date, formatted_next_date = get_reporte_date(file_path)
+
     # Mostrar la cantidad de eventos encima de cada barra
     for bar in bars1:
         height = bar.get_height()
