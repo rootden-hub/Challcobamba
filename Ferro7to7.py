@@ -52,15 +52,23 @@ def get_reporte_date(file_path):
     
     return formatted_date
     
-def sumarle_un_dia(fecha_str):
-    # Convertir la fecha en formato 'DD de MM del YYYY' a un objeto datetime
-    fecha = datetime.strptime(fecha_str, "%d de %B del %Y")
+def sumar_un_dia(file_path):
+    # Primero, obtenemos la fecha formateada a partir del archivo
+    formatted_date = get_reporte_date(file_path)
     
-    # Sumar un día
-    nueva_fecha = fecha + timedelta(days=1)
-    
-    # Formatear la nueva fecha como 'DD de MM del YYYY'
-    return nueva_fecha.strftime("%d de %B del %Y")
+    if formatted_date:
+        # Convertir la fecha extraída al formato datetime
+        fecha = datetime.strptime(formatted_date, "%d de %B del %Y")
+        
+        # Sumar un día a la fecha
+        nueva_fecha = fecha + timedelta(days=1)
+        
+        # Formatear la nueva fecha como 'DD de MM del YYYY'
+        nueva_fecha_formateada = nueva_fecha.strftime("%d de %B del %Y")
+        
+        return formatted_date, nueva_fecha_formateada
+    else:
+        return None, None
 
 
 
