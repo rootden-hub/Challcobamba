@@ -61,13 +61,12 @@ def sumar_un_dia(file_path):
         # Sumar un día
         nueva_fecha = fecha + timedelta(days=1)
         
-        # Convertir la nueva fecha a formato string
-        nueva_fecha_formateada = nueva_fecha.strftime("%d de %B del %Y")
+        # Convertir la nueva fecha a formato string 'DD-MM-YYYY'
+        nueva_fecha_formateada = nueva_fecha.strftime("%d-%m-%Y")
         
         return formatted_date, nueva_fecha_formateada
     else:
         return None, None
-
 
 
 # Función para formatear el tiempo como horas:minutos
