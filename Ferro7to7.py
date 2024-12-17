@@ -332,11 +332,11 @@ def plot_eventos(df, report_date):
 #----------------------------------------------------------------------
     
 
-    
+    initial_date, incremented_date = get_and_increment_date(file_path)
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {date_str}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {initial_date}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
