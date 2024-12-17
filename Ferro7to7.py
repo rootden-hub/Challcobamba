@@ -331,7 +331,7 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 #----------------------------------------------------------------------
-    def generate_repor2t(df, file_name):
+    def generate_report2(df, file_name):
     date_str, incremented_date_str = get_and_increment_date_simple(file_name)
 
    # Etiquetas y título
