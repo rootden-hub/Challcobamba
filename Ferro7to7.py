@@ -392,7 +392,7 @@ def plot_eventos(df, report_date):
 
 def generate_report(df, file_name):
     report_date = get_reporte_date(file_name)
-
+    date_str, incremented_date_str = get_and_increment_date(file_name)
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
 
