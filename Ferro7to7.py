@@ -280,7 +280,9 @@ def plot_eventos(df, report_date):
      #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
       #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
     }).fillna(0)
-
+    # Asumiendo que report_date ya viene de tu función
+    report_date = datetime.strptime(report_date, "%d de %B del %Y")
+    report_date_plus_one = report_date + timedelta(days=1)
     # Calcular el total, promedio y máximo para cada tipo de evento
     total_tipo_1 = conteos['Amarilla'].sum()
     promedio_tipo_1 = conteos['Amarilla'].mean()
