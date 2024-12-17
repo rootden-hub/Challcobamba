@@ -332,7 +332,7 @@ def plot_eventos(df, report_date):
 #----------------------------------------------------------------------
     
 
-    initial_date, incremented_date = get_and_increment_date(file_path)
+    initial_date, incremented_date = get_and_increment_date(file_name)
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
