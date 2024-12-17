@@ -79,30 +79,20 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     # Concatenar los DataFrames
     combined_df = pd.concat([caution_df, alarm_df], ignore_index=True)
-    
+
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
-     # Convertir 'Date' a datetime si no está en ese formato (si es necesario)
-    combined_df['Date'] = pd.to_datetime(combined_df['Date'])
 
-    # Definir el rango de horas: entre 07:00 AM y 07:00 AM del siguiente día
-    # Creamos una nueva columna que extrae solo la hora de 'Date'
-    combined_df['Hour'] = combined_df['Date'].dt.hour + combined_df['Date'].dt.minute / 60
-
-    # Filtrar solo las filas con hora entre 07:00 y 07:00 (pasando de las 07:00 AM de un día a las 07:00 AM del siguiente día)
-    combined_df = combined_df[(combined_df['Hour'] >= 7) & (combined_df['Hour'] < 7 + 24)]
     # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
     combined_df['Type_priority'] = combined_df['Type'].apply(lambda x: 0 if x == 'Start' else 1)
     combined_df = combined_df.sort_values(by=['Date', 'Type_priority'], ascending=[True, True])
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
-  
-
 
     # Crear columna de 'Duration' en formato min:segundos
     durations = []
     for i in range(len(combined_df) - 1):
-        end_time = combined_df.iloc[i + 1]['Date'] 
+        end_time = combined_df.iloc[i + 1]['Date']
         start_time = combined_df.iloc[i]['Date']
         duration = end_time - start_time
         durations.append(duration)
@@ -111,8 +101,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     durations.append('')
 
     combined_df['Duration'] = durations
-
-
 
 
     # Actualizar la columna 'Status' según las nuevas reglas definidas
@@ -167,13 +155,12 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     fig, ax = plt.subplots(figsize=(15, 8))
 
     # Adjust x-axis limits to the specific day
-    #agregamos+ pd.Timedelta(hours=7)------------------------------------------------------------------------------------------------------
-    start_date = combined_df['Date'].min().normalize() + pd.Timedelta(hours=7)
+    start_date = combined_df['Date'].min().normalize()
     end_date = start_date + pd.Timedelta(days=1)
     ax.set_xlim(start_date, end_date)
 
     # Set x-axis ticks every 2 hours
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=2))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
 
     # Remove x-axis label
@@ -204,8 +191,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
             else:
                 ax.text(start + row['Duration'] / 2, 0, duration_text, ha='center',
                         fontsize=9, color='black', rotation=90)
-           
-                
+
     ax.set_yticks([])
     ax.set_title(f'{report_date} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
 
@@ -270,15 +256,9 @@ def plot_eventos(df, report_date):
     contador_tipo_2_y_3 = contador_tipo_2.add(contador_tipo_3, fill_value=0)
 
     # Crear un DataFrame con ambos conteos
-    #Se agega para modficar linea de tiempo-------------------------------------------------------------------------------------------------
-    horas = list(range(7, 24)) + list(range(0, 7))  # 7 AM a 7 AM
     conteos = pd.DataFrame({
-        'Amarilla': contador_tipo_1.reindex(horas, fill_value=0),
-        'Roja': contador_tipo_2_y_3.reindex(horas, fill_value=0)
-    #----------------------------------------------------------------------------------------------------------
-    #conteos = pd.DataFrame({
-     #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
-      #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
+        'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
+        'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
     }).fillna(0)
 
     # Calcular el total, promedio y máximo para cada tipo de evento
@@ -301,20 +281,16 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 
-   # Etiquetas y título
+    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
-        ax.set_title(
-        f'Frecuencia de descargas eléctricas del {formatted_date} al {formatted_next_date}\nSensores Ferrobamba',
-        fontsize=16, pad=20
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
-
     # Rotar las etiquetas del eje X
     plt.xticks(rotation=90)
-    file_path = "/ruta/al/archivo/12 12 20_reporte.txt"
-    formatted_date, formatted_next_date = get_reporte_date(file_path)
+
     # Mostrar la cantidad de eventos encima de cada barra
     for bar in bars1:
         height = bar.get_height()
@@ -402,8 +378,7 @@ def generate_report(df, file_name):
             reorganized_df = pd.DataFrame(reorganized_data)
 
             # Obtener la fecha del primer registro y establecer la hora 00:00
-            first_date = pd.to_datetime(reorganized_df['Date'].iloc[0]).normalize()+ pd.Timedelta(hours=7)
-
+            first_date = pd.to_datetime(reorganized_df['Date'].iloc[0]).normalize()
             start_of_day = first_date.strftime('%m/%d/%y %H:%M %p')
 
             # Crear un registro al inicio
@@ -418,8 +393,7 @@ def generate_report(df, file_name):
             ], ignore_index=True)
 
             # Obtener la fecha del último registro y sumar un día para establecer la hora 00:00
-            last_date = pd.to_datetime(reorganized_df['Date'].iloc[-1]).normalize() + timedelta(days=1)+ pd.Timedelta(hours=7)
-
+            last_date = pd.to_datetime(reorganized_df['Date'].iloc[-1]).normalize() + timedelta(days=1)
             start_of_next_day = last_date.strftime('%m/%d/%y %H:%M %p')
 
             # Crear un registro al final
@@ -496,7 +470,7 @@ def generate_report(df, file_name):
     title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
     subtitle_paragraph = cell_title.add_paragraph(
-        f"De: {report_date} 07:00 horas\tA: {report_date} 07:00 horas"
+        f"De: {report_date} 00:00 horas\tA: {report_date} 23:59 horas"
     )
     subtitle_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
