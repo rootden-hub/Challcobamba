@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import re
-
+import locale
 
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.enum.section import WD_ORIENT
@@ -23,7 +23,7 @@ from docx.shared import Pt
 from docx import Document
 from io import BytesIO
 
-
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 # ****************** Extraer la fecha del nombre del archivo
 def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
@@ -57,13 +57,13 @@ def sumar_un_dia(file_path):
     formatted_date = get_reporte_date(file_path)
     
     if formatted_date:
-        # Separar la fecha en partes
+        # Separar la fecha en partes (día, mes y año)
         parts = formatted_date.split(" de ")
         day = int(parts[0])
         month_name = parts[1]
         year = int(parts[2].split(" ")[0])
         
-        # Mapeo local del mes en español a su número
+        # Mapeo de los meses en español a su número
         months_map = {
             "enero": 1, "febrero": 2, "marzo": 3, "abril": 4, "mayo": 5, "junio": 6,
             "julio": 7, "agosto": 8, "septiembre": 9, "octubre": 10, "noviembre": 11, "diciembre": 12
@@ -72,13 +72,13 @@ def sumar_un_dia(file_path):
         # Obtener el número del mes a partir del nombre
         month = months_map[month_name]
         
-        # Crear la fecha en formato datetime
+        # Crear un objeto datetime con el día, mes y año extraídos
         fecha = datetime(year, month, day)
         
-        # Sumar un día a la fecha
+        # Sumar un día
         nueva_fecha = fecha + timedelta(days=1)
         
-        # Formatear la nueva fecha como 'DD de MM del YYYY'
+        # Convertir la nueva fecha a formato español
         nueva_fecha_formateada = nueva_fecha.strftime("%d de %B del %Y")
         
         return formatted_date, nueva_fecha_formateada
