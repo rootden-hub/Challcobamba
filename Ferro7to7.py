@@ -77,8 +77,8 @@ def get_and_increment_date(file_path):
         
         return date_str, incremented_date_str
     else:
-        return None, None    
-
+        # Si no se encuentra la fecha en el archivo, devolver None
+        return None, None
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
