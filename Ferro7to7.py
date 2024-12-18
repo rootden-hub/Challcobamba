@@ -577,7 +577,7 @@ except FileNotFoundError:
     st.warning("No se encontró la imagen en la ruta especificada.")
 
 # Título largo de la app
-st.title("Generador de Reportes Diarios FERROBAMBA")
+st.title("Generador de Reportes Diarios FERROBAMBA: 7:00to7:00")
 
 
 # Llamar a la función para cargar el archivo
