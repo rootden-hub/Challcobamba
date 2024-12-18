@@ -91,21 +91,12 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     
     # Ordenar las filas por la columna 'Date'
     combined_df = combined_df.sort_values(by='Date', ascending=True)
-     # Convertir 'Date' a datetime si no está en ese formato (si es necesario)
-    combined_df['Date'] = pd.to_datetime(combined_df['Date'])
-
-    # Definir el rango de horas: entre 07:00 AM y 07:00 AM del siguiente día
-    # Creamos una nueva columna que extrae solo la hora de 'Date'
-    combined_df['Hour'] = combined_df['Date'].dt.hour + combined_df['Date'].dt.minute / 60
-
-    # Filtrar solo las filas con hora entre 07:00 y 07:00 (pasando de las 07:00 AM de un día a las 07:00 AM del siguiente día)
-    combined_df = combined_df[(combined_df['Hour'] >= 7) & (combined_df['Hour'] < 7 + 24)]
+  
     # Ordenar las filas por la columna 'Date', y si hay fechas iguales, por 'Type' (Start primero)
     combined_df['Type_priority'] = combined_df['Type'].apply(lambda x: 0 if x == 'Start' else 1)
     combined_df = combined_df.sort_values(by=['Date', 'Type_priority'], ascending=[True, True])
     combined_df = combined_df.drop(columns=['Type_priority'])  # Eliminar columna auxiliar
 
-  
 
 
     # Crear columna de 'Duration' en formato min:segundos
