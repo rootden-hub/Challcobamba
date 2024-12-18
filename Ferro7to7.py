@@ -525,7 +525,7 @@ def generate_report(df, file_name):
 
     # Configurar el contenido del footer
     footer_paragraph.text = (
-        f"{today_date} Supervisión de Mantenimiento Eléctrico-Telecomunicaciones"
+        f"{today_date} Supervisión de Mantenimiento Eléctrico - Telecomunicaciones y Dispatch"
     )
     footer_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER  # Centrar el texto
 
