@@ -393,7 +393,11 @@ def plot_eventos(df, report_date):
 
 def generate_report(df, file_name):
     report_date = get_reporte_date(file_name)
-    
+    if report_date:
+        # Sumar un día usando la nueva función
+        next_day = get_next_day_date(report_date)
+    else:
+        next_day = None  #
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
 
