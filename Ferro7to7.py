@@ -36,7 +36,7 @@ def get_reporte_date(file_path):
         year = "20" + date_match.group(3)
 
         # Formatear la fecha
-        formatted_date = f"{day} de {month_name} del {year}"
+        
         formatted_date = date_obj.strftime('%d-%m-%Y') 
     else:
         # Si no se encuentra la fecha en el nombre del archivo
