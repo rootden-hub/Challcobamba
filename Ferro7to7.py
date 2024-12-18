@@ -51,17 +51,30 @@ def get_reporte_date(file_path):
     return formatted_date
 
 def get_next_day_date(formatted_date):
-    # Convertir la fecha formateada (día, mes y año) a un objeto datetime
+    # Verificar si la fecha tiene el formato esperado
+    print(f"Formatted Date: {formatted_date}")
+    
+    parts = formatted_date.split(' de ')
+    if len(parts) != 3:
+        print(f"Error: La fecha no tiene el formato esperado: {formatted_date}")
+        return None
+    
+    day, month_name, year = parts
+    
     months = [
         "enero", "febrero", "marzo", "abril", "mayo", "junio", 
         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
     ]
     
-    # Extraer día, mes y año
-    day, month_name, year = formatted_date.split(' de ')
+    # Verificar si el mes es válido
+    if month_name not in months:
+        print(f"Error: El mes '{month_name}' no es válido.")
+        return None
+    
+    # Obtener el número del mes
     month = months.index(month_name) + 1
     day = int(day)
-    year = int(year.split(' del ')[1])
+    year = int(year)
     
     # Crear un objeto datetime con la fecha extraída
     date_object = datetime(year, month, day)
