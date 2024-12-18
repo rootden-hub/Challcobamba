@@ -48,10 +48,10 @@ def get_reporte_date(file_path):
 def add_day_to_date(formatted_date):
     try:
         # Convertir formatted_date de string a datetime
-        date_obj = datetime.strptime(formatted_date, '%d-%m-%Y')
+        date_obj2 = datetime.strptime(formatted_date, '%d-%m-%Y')
 
         # Sumar un día
-        date_plus_one = date_obj + timedelta(days=1)
+        date_plus_one = date_obj2 + timedelta(days=1)
 
         # Convertir de nuevo a formato 'dd-mm-yyyy'
         new_formatted_date = date_plus_one.strftime('%d-%m-%Y')
@@ -326,7 +326,7 @@ formatted_date, date_obj = get_reporte_date(file_path)
 
 def generate_report(df, file_name, date_obj):
     report_date = get_reporte_date(file_name)
-    report_date2 = add_day_to_date(date_obj)
+    report_date2 = add_day_to_date(date_obj2)
 
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
