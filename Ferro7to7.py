@@ -322,7 +322,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     return ax
 
 
-def generate_report(df, file_name, date_obj):
+def generate_report(df, file_name):
     report_date = get_reporte_date(file_name)
 
 
