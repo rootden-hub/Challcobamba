@@ -264,8 +264,6 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     return ax
 
-
-formatted_date, date_obj = get_reporte_date(file_path)
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
