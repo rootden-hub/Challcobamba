@@ -324,7 +324,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
 def generate_report(df, file_name, date_obj):
     report_date = get_reporte_date(file_name)
-    report_date2 = add_day_to_date(date_obj2)
+
 
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
