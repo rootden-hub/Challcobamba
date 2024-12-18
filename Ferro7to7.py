@@ -34,14 +34,20 @@ def get_reporte_date(file_path):
         month = int(date_match.group(2))
         year = "20" + date_match.group(3)
         
-        # Convertir la fecha a formato 'DD-MM-YYYY' para trabajo interno
-        date_str = f"{day}-{month:02d}-{year}"
+        # Convertir el mes numérico a nombre en español
+        months = [
+            "enero", "febrero", "marzo", "abril", "mayo", "junio", 
+            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        ]
+        month_name = months[month - 1]
         
-        # Convertir la fecha a un objeto datetime
-        formatted_date = datetime.strptime(date_str, "%d-%m-%Y")
+        # Formatear la fecha con nombre del mes
+        formatted_date = f"{day} de {month_name} del {year}"
         
-        # Devolver la fecha en formato texto y también como objeto datetime
-        return formatted_date, date_str
+        # También almacenamos la fecha como objeto datetime para sumar un día
+        date_object = datetime.strptime(f"{day}-{month}-{year}", "%d-%m-%Y")
+        
+        return formatted_date, date_object
     else:
         return None, None
 
