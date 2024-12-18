@@ -23,7 +23,7 @@ from docx import Document
 from io import BytesIO
 
 # ****************** Extraer la fecha del nombre del archivo
-ef get_reporte_date(file_path):
+def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
     file_name = file_path.split("/")[-1]
     # Buscar el patrón de fecha DD MM YY
