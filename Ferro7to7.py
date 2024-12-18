@@ -30,20 +30,20 @@ def get_reporte_date(file_path):
     date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
     
     if date_match:
-        day = date_match.group(1)
-        month = int(date_match.group(2))
-        # Asumir que los años son del 2000 en adelante
-        year = "20" + date_match.group(3)
+        day = int(date_match.group(1))   # Convertir a entero
+        month = int(date_match.group(2)) # Convertir a entero
+        year = "20" + date_match.group(3)  # Asumir que los años son del 2000 en adelante
 
-        # Formatear la fecha
-        
-        formatted_date = date_obj.strftime('%d-%m-%Y') 
+        # Crear el objeto datetime para manipularlo más tarde
+        date_obj = datetime(year=int(year), month=month, day=day)
+
+        # Formatear la fecha en el formato 'dd-mm-yyyy'
+        formatted_date = date_obj.strftime('%d-%m-%Y')  # Ejemplo: "15-12-2024"
     else:
         # Si no se encuentra la fecha en el nombre del archivo
         formatted_date = None
     
     return formatted_date
-
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
     if isinstance(td, pd.Timedelta):
