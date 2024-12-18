@@ -27,7 +27,7 @@ def get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
     file_name = file_path.split("/")[-1]
     # Buscar el patrón de fecha DD MM YY
-    date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
+    date_match = re.search(r'(\d{2})[\s_-](\d{2})[\s_-](\d{2})', file_name))
     
     if date_match:
         day = date_match.group(1)
