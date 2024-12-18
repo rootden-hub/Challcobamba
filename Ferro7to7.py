@@ -50,36 +50,30 @@ def get_reporte_date(file_path):
     
     return formatted_date
 
-def get_next_day_date(report_date):
-    # Diccionario de meses para convertir entre nombre y número
+def get_next_day_date(formatted_date):
+    # Convertir la fecha formateada (día, mes y año) a un objeto datetime
     months = [
         "enero", "febrero", "marzo", "abril", "mayo", "junio", 
         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
     ]
     
-    # Separar la fecha original en partes (día, mes en texto y año)
-    day, month_name, year = report_date.split(" de ")
-    day = int(day)  # Convertir día a número
-    year = int(year.split()[-1])  # Extraer el año como número
+    # Extraer día, mes y año
+    day, month_name, year = formatted_date.split(' de ')
+    month = months.index(month_name) + 1
+    day = int(day)
+    year = int(year.split(' del ')[1])
     
-    # Obtener el número del mes
-    month = months.index(month_name) + 1  # Meses son base 0 en Python
-    
-    # Crear un objeto datetime
-    date_obj = datetime(year, month, day)
+    # Crear un objeto datetime con la fecha extraída
+    date_object = datetime(year, month, day)
     
     # Sumar un día
-    next_day = date_obj + timedelta(days=1)
+    next_day = date_object + timedelta(days=1)
     
-    # Reconstruir la fecha en el mismo formato
-    day_next = next_day.day
-    month_next = months[next_day.month - 1]  # Convertir mes numérico a nombre
-    year_next = next_day.year
-    
-    # Formatear la fecha
-    next_day_formatted = f"{day_next} de {month_next} del {year_next}"
+    # Formatear la fecha al formato original
+    next_day_formatted = next_day.strftime(f"%d de {months[next_day.month - 1]} del %Y")
     
     return next_day_formatted
+
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
