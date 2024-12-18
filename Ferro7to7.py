@@ -268,9 +268,9 @@ def plot_eventos(df, report_date):
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
-    try:
-        # Calcular la nueva fecha sumando un día
-        report_date_next_day = add_day_to_date(report_date)
+    
+    # Calcular la nueva fecha sumando un día
+    report_date_next_day = add_day_to_date(report_date)
 
     # Contar los eventos por hora y por tipo
     contador_tipo_1 = df[df['Description'] == 'Caution Flash'].groupby('hora').size()  # Amarillo
