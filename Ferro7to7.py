@@ -88,6 +88,15 @@ def get_next_day_date(formatted_date):
     return next_day_formatted
 
 
+# Paso 3: Crear el diccionario fechas
+fechas = {
+    'report_date': report_date,
+    'next_day': next_day
+}
+
+# Paso 4: Llamar a plot_eventos, pasando el DataFrame 'df' y el diccionario 'fechas'
+plot_eventos(df, fechas)
+
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
     if isinstance(td, pd.Timedelta):
@@ -400,11 +409,7 @@ def plot_eventos(df, report_date, next_day):
 
 def generate_report(df, file_name):
     report_date = get_reporte_date(file_name)
-    if report_date:
-        # Sumar un día usando la nueva función
-        next_day = get_next_day_date(report_date)
-    else:
-        next_day = None  #
+
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
 
