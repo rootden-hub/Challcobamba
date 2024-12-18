@@ -268,7 +268,7 @@ def plot_eventos(df, report_date):
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
-try:
+    try:
         # Calcular la nueva fecha sumando un día
         report_date_next_day = add_day_to_date(report_date)
 
