@@ -264,7 +264,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
     return ax
 
-    def plot_eventos(df, report_date):
+def plot_eventos(df, report_date):
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
