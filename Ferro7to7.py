@@ -282,10 +282,17 @@ def plot_eventos(df, report_date):
     contador_tipo_2_y_3 = contador_tipo_2.add(contador_tipo_3, fill_value=0)
 
     # Crear un DataFrame con ambos conteos
+    #Se agega para modficar linea de tiempo-------------------------------------------------------------------------------------------------
+    horas = list(range(7, 24)) + list(range(0, 7))  # 7 AM a 7 AM
     conteos = pd.DataFrame({
-        'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
-        'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
+        'Amarilla': contador_tipo_1.reindex(horas, fill_value=0),
+        'Roja': contador_tipo_2_y_3.reindex(horas, fill_value=0)
+    #----------------------------------------------------------------------------------------------------------
+    #conteos = pd.DataFrame({
+     #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
+      #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
     }).fillna(0)
+
 
     # Calcular el total, promedio y máximo para cada tipo de evento
     total_tipo_1 = conteos['Amarilla'].sum()
