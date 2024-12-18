@@ -265,54 +265,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     return ax
 
 
-def plot_eventos(df, report_date):
-
-    # Conversión de fechas
-    df['Start'] = pd.to_datetime(df['Start'])
-    df['hora'] = df['Start'].dt.hour
-
-    # Contar los eventos por hora y por tipo
-    contador_tipo_1 = df[df['Description'] == 'Caution Flash'].groupby('hora').size()  # Amarillo
-    contador_tipo_2 = df[df['Description'] == 'Alarm Flash'].groupby('hora').size()  # Roja
-    contador_tipo_3 = df[df['Description'] == 'Warning Flash'].groupby('hora').size()  # Naranja
-
-    # Sumar Alarm Flash y Caution Flash
-    contador_tipo_2_y_3 = contador_tipo_2.add(contador_tipo_3, fill_value=0)
-
-    # Crear un DataFrame con ambos conteos
-    #Se agega para modficar linea de tiempo-------------------------------------------------------------------------------------------------
-    horas = list(range(7, 24)) + list(range(0, 7))  # 7 AM a 7 AM
-    conteos = pd.DataFrame({
-        'Amarilla': contador_tipo_1.reindex(horas, fill_value=0),
-        'Roja': contador_tipo_2_y_3.reindex(horas, fill_value=0)
-    #----------------------------------------------------------------------------------------------------------
-    #conteos = pd.DataFrame({
-     #   'Amarilla': contador_tipo_1.reindex(range(24), fill_value=0),
-      #  'Roja': contador_tipo_2_y_3.reindex(range(24), fill_value=0)
-    }).fillna(0)
-    
-    # Calcular el total, promedio y máximo para cada tipo de evento
-    total_tipo_1 = conteos['Amarilla'].sum()
-    promedio_tipo_1 = conteos['Amarilla'].mean()
-    maximo_tipo_1 = conteos['Amarilla'].max()
-
-    total_tipo_2_y_3 = conteos['Roja'].sum()
-    promedio_tipo_2_y_3 = conteos['Roja'].mean()
-    maximo_tipo_2_y_3 = conteos['Roja'].max()
-
-    # Definir la posición de las barras
-    x = np.arange(len(conteos))  # Las posiciones de las horas
-    width = 0.35  # Ancho de las barras
-
-    # Crear el subplot
-    fig, ax = plt.subplots(figsize=(15, 8))
-
-    # Plot de las dos series de datos
-    bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
-    bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
-#----------------------------------------------------------------------
- 
-
+formatted_date, date_obj = get_reporte_date(file_path)
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
@@ -371,8 +324,9 @@ def plot_eventos(df, report_date):
     return ax
 
 
-def generate_report(df, file_name):
+def generate_report(df, file_name, date_obj):
     report_date = get_reporte_date(file_name)
+    report_date2 = add_day_to_date(date_obj)
 
     # Verificar las descripciones únicas en la columna 'Description'
     unique_descriptions = df['Description'].dropna().unique()  # Ignorar valores nulos
