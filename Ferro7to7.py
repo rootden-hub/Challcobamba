@@ -50,57 +50,6 @@ def get_reporte_date(file_path):
     
     return formatted_date
 
-def get_next_day_date(formatted_date):
-    # Verificar si la fecha tiene el formato esperado
-    print(f"Formatted Date: {formatted_date}")
-    
-    parts = formatted_date.split(' de ')
-    if len(parts) != 3:
-        print(f"Error: La fecha no tiene el formato esperado: {formatted_date}")
-        return None
-    
-    day, month_name, year = parts
-    
-    months = [
-        "enero", "febrero", "marzo", "abril", "mayo", "junio", 
-        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-    ]
-    
-    # Verificar si el mes es válido
-    if month_name not in months:
-        print(f"Error: El mes '{month_name}' no es válido.")
-        return None
-    
-    # Obtener el número del mes
-    month = months.index(month_name) + 1
-    day = int(day)
-    year = int(year)
-    
-    # Crear un objeto datetime con la fecha extraída
-    date_object = datetime(year, month, day)
-    
-    # Sumar un día
-    next_day = date_object + timedelta(days=1)
-    
-    # Formatear la fecha al formato original
-    next_day_formatted = next_day.strftime(f"%d de {months[next_day.month - 1]} del %Y")
-    
-    return next_day_formatted
-
-def generar_y_graficar(df, file_name):
-    # Paso 1: Obtener las fechas
-    report_date = get_reporte_date(file_name)
-    next_day = get_next_day_date(report_date)
-
-    # Paso 2: Crear el diccionario con las fechas
-    fechas = {
-        'report_date': report_date,
-        'next_day': next_day
-    }
-
-    # Paso 3: Llamar a la función de graficado
-    plot_eventos(df, fechas)
-
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
@@ -307,20 +256,8 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     return ax
 
 
-def plot_eventos(df, fechas):
-   # Asegúrate de que 'fechas' es un diccionario y tiene las claves correctas
-    if isinstance(fechas, dict):
-        report_date = fechas.get('report_date')  # Accede correctamente a las claves
-        next_day = fechas.get('next_day')  # Accede correctamente a las claves
-    else:
-        print("Error: 'fechas' no es un diccionario válido.")
-        return  # Termina la función si 'fechas' no es un diccionario válido
+def plot_eventos(df, report_date):
 
-    # Si 'report_date' o 'next_day' son None, entonces imprime un error
-    if not report_date or not next_day:
-        print("Error: Fechas no están disponibles.")
-        return
-    
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
@@ -371,7 +308,7 @@ def plot_eventos(df, fechas):
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
     
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{fechas}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
