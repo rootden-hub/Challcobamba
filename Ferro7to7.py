@@ -87,15 +87,20 @@ def get_next_day_date(formatted_date):
     
     return next_day_formatted
 
+def generar_y_graficar(df, file_name):
+    # Paso 1: Obtener las fechas
+    report_date = get_reporte_date(file_name)
+    next_day = get_next_day_date(report_date)
 
-# Paso 3: Crear el diccionario fechas
-fechas = {
-    'report_date': report_date,
-    'next_day': next_day
-}
+    # Paso 2: Crear el diccionario con las fechas
+    fechas = {
+        'report_date': report_date,
+        'next_day': next_day
+    }
 
-# Paso 4: Llamar a plot_eventos, pasando el DataFrame 'df' y el diccionario 'fechas'
-plot_eventos(df, fechas)
+    # Paso 3: Llamar a la función de graficado
+    plot_eventos(df, fechas)
+
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
