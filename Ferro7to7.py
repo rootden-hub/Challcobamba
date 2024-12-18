@@ -44,6 +44,22 @@ def get_reporte_date(file_path):
         formatted_date = None
     
     return formatted_date
+
+def add_day_to_date(formatted_date):
+    try:
+        # Convertir formatted_date de string a datetime
+        date_obj = datetime.strptime(formatted_date, '%d-%m-%Y')
+
+        # Sumar un día
+        date_plus_one = date_obj + timedelta(days=1)
+
+        # Convertir de nuevo a formato 'dd-mm-yyyy'
+        new_formatted_date = date_plus_one.strftime('%d-%m-%Y')
+
+        return new_formatted_date
+    except ValueError:
+        return None  # Si el formato no es válido
+
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
     if isinstance(td, pd.Timedelta):
