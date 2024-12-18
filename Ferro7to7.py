@@ -268,6 +268,9 @@ def plot_eventos(df, report_date):
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
+try:
+        # Calcular la nueva fecha sumando un día
+        report_date_next_day = add_day_to_date(report_date)
 
     # Contar los eventos por hora y por tipo
     contador_tipo_1 = df[df['Description'] == 'Caution Flash'].groupby('hora').size()  # Amarillo
@@ -306,7 +309,7 @@ def plot_eventos(df, report_date):
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
     
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{report_date_next_day}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
