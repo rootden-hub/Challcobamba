@@ -23,11 +23,11 @@ from docx import Document
 from io import BytesIO
 
 # ****************** Extraer la fecha del nombre del archivo
-def get_reporte_date(file_path):
+ef get_reporte_date(file_path):
     # Obtener solo el nombre del archivo
     file_name = file_path.split("/")[-1]
     # Buscar el patrón de fecha DD MM YY
-    date_match = re.search(r'(\d{2})[\s_-](\d{2})[\s_-](\d{2})', file_name)
+    date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
     
     if date_match:
         day = date_match.group(1)
@@ -35,15 +35,14 @@ def get_reporte_date(file_path):
         # Asumir que los años son del 2000 en adelante
         year = "20" + date_match.group(3)
 
-        # Crear el objeto datetime para manipularlo más tarde
-        formatted_date = f"{day} de {month} del {year}"
-
-        # Devolver la fecha formateada como cadena en formato 'YYYY-MM-DD' para manipularla
-        return formatted_date, f"{year}-{month:02d}-{day:02d}"
+        # Formatear la fecha
+        formatted_date = f"{day} de {month_name} del {year}"
+        formatted_date = date_obj.strftime('%d-%m-%Y') 
     else:
         # Si no se encuentra la fecha en el nombre del archivo
-        return None, None
-
+        formatted_date = None
+    
+    return formatted_date
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
