@@ -32,54 +32,19 @@ def get_reporte_date(file_path):
     if date_match:
         day = date_match.group(1)
         month = int(date_match.group(2))
-        # Asumir que los años son del 2000 en adelante
         year = "20" + date_match.group(3)
-
-        # Convertir el mes numérico a nombre en español
-        months = [
-            "enero", "febrero", "marzo", "abril", "mayo", "junio", 
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-        ]
-        month_name = months[month - 1]
         
-        # Formatear la fecha
-        formatted_date = f"{day} de {month_name} del {year}"
+        # Convertir la fecha a formato 'DD-MM-YYYY' para trabajo interno
+        date_str = f"{day}-{month:02d}-{year}"
+        
+        # Convertir la fecha a un objeto datetime
+        formatted_date = datetime.strptime(date_str, "%d-%m-%Y")
+        
+        # Devolver la fecha en formato texto y también como objeto datetime
+        return formatted_date, date_str
     else:
-        # Si no se encuentra la fecha en el nombre del archivo
-        formatted_date = None
-    
-    return formatted_date
-    
-def get_and_increment_date_simple(file_path):
-    # Obtener solo el nombre del archivo
-    file_name = file_path.split("/")[-1]
-    
-    # Buscar el patrón de fecha en formato 'DD MM YY'
-    date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
-    
-    if date_match:
-        # Extraer día, mes y año
-        day = date_match.group(1)
-        month = date_match.group(2)
-        year = "20" + date_match.group(3)  # Suponiendo que el año es del 2000 en adelante
-        
-        # Crear la fecha en formato 'DD-MM-YYYY'
-        date_str = f"{day}-{month}-{year}"
-        
-        # Convertir la fecha en un objeto datetime
-        current_date = datetime.strptime(date_str, "%d-%m-%Y")
-        
-        # Sumar un día a la fecha
-        incremented_date = current_date + timedelta(days=1)
-        
-        # Convertir las fechas a formato string 'DD-MM-YYYY'
-        date_str = current_date.strftime("%d-%m-%Y")
-        incremented_date_str = incremented_date.strftime("%d-%m-%Y")
-        
-        return date_str, incremented_date_str
-    else:
-        # Si no se encuentra la fecha en el archivo, devolver None
         return None, None
+
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
@@ -331,14 +296,13 @@ def plot_eventos(df, report_date):
     bars1 = ax.bar(x - width/2, conteos['Amarilla'], width, label='Amarilla', color='yellow')
     bars2 = ax.bar(x + width/2, conteos['Roja'], width, label='Roja', color='red')
 #----------------------------------------------------------------------
-    def generate_report2(df, file_name):
-    date_str, incremented_date_str = get_and_increment_date_simple(file_name)
+ 
 
    # Etiquetas y título
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
     
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {date_str}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
