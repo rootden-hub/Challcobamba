@@ -307,7 +307,11 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     return ax
 
 
-def plot_eventos(df, report_date, next_day):
+def plot_eventos(df, fechas):
+    # Extraer las fechas del diccionario
+    report_date = fechas['report_date']
+    next_day = fechas['next_day']
+    
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
     df['hora'] = df['Start'].dt.hour
@@ -358,7 +362,7 @@ def plot_eventos(df, report_date, next_day):
     ax.set_xlabel('Horas del día')
     ax.set_ylabel('Eventos')
     
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{report_date}-{next_day}\nSensores Ferrobamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día{fechas}\nSensores Ferrobamba', fontsize=16, pad=20)
     ax.set_xticks(x)
     ax.set_xticklabels([f'{h:02d}:00' for h in range(24)])
 
