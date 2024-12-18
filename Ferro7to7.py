@@ -566,7 +566,7 @@ def cargar_archivo():
         except Exception as e:
             st.error(f"Ocurrió un error al leer el archivo: {e}")
     else:
-        st.warning("Por favor, selecciona un archivo de texto (.txt)")
+        st.warning("Por favor, selecciona un archivo de texto (.txt), de preferenia en formato Mode Report 12 12 24")
 
 # Mostrar el logo (asegúrate de tener el archivo en la ruta correcta)
 try:
