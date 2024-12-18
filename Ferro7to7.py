@@ -308,9 +308,18 @@ def generate_daily_report(caution_df, alarm_df, report_date):
 
 
 def plot_eventos(df, fechas):
-    # Extraer las fechas del diccionario
-    report_date = fechas['report_date']
-    next_day = fechas['next_day']
+   # Asegúrate de que 'fechas' es un diccionario y tiene las claves correctas
+    if isinstance(fechas, dict):
+        report_date = fechas.get('report_date')  # Accede correctamente a las claves
+        next_day = fechas.get('next_day')  # Accede correctamente a las claves
+    else:
+        print("Error: 'fechas' no es un diccionario válido.")
+        return  # Termina la función si 'fechas' no es un diccionario válido
+
+    # Si 'report_date' o 'next_day' son None, entonces imprime un error
+    if not report_date or not next_day:
+        print("Error: Fechas no están disponibles.")
+        return
     
     # Conversión de fechas
     df['Start'] = pd.to_datetime(df['Start'])
