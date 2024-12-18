@@ -35,20 +35,14 @@ def get_reporte_date(file_path):
         # Asumir que los años son del 2000 en adelante
         year = "20" + date_match.group(3)
 
-        # Convertir el mes numérico a nombre en español
-        months = [
-            "enero", "febrero", "marzo", "abril", "mayo", "junio", 
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-        ]
-        month_name = months[month - 1]
-        
-        # Formatear la fecha
-        formatted_date = f"{day} de {month_name} del {year}"
+        # Crear el objeto datetime para manipularlo más tarde
+        formatted_date = f"{day} de {month} del {year}"
+
+        # Devolver la fecha formateada como cadena en formato 'YYYY-MM-DD' para manipularla
+        return formatted_date, f"{year}-{month:02d}-{day:02d}"
     else:
         # Si no se encuentra la fecha en el nombre del archivo
-        formatted_date = None
-    
-    return formatted_date
+        return None, None
 
 
 # Función para formatear el tiempo como horas:minutos
