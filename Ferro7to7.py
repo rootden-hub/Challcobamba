@@ -32,8 +32,9 @@ def get_reporte_date(file_path):
     if date_match:
         day = date_match.group(1)
         month = int(date_match.group(2))
+        # Asumir que los años son del 2000 en adelante
         year = "20" + date_match.group(3)
-        
+
         # Convertir el mes numérico a nombre en español
         months = [
             "enero", "febrero", "marzo", "abril", "mayo", "junio", 
@@ -41,16 +42,24 @@ def get_reporte_date(file_path):
         ]
         month_name = months[month - 1]
         
-        # Formatear la fecha con nombre del mes
+        # Formatear la fecha
         formatted_date = f"{day} de {month_name} del {year}"
-        
-        # También almacenamos la fecha como objeto datetime para sumar un día
-        date_object = datetime.strptime(f"{day}-{month}-{year}", "%d-%m-%Y")
-        
-        return formatted_date, date_object
     else:
-        return None, None
+        # Si no se encuentra la fecha en el nombre del archivo
+        formatted_date = None
+    
+    return formatted_date
 
+def get_next_day_date(report_date):
+    # Convertir la fecha en texto a objeto datetime
+    date_object = datetime.strptime(report_date, "%d de %B del %Y")
+    
+    # Sumar un día
+    next_day = date_object + timedelta(days=1)
+    
+    # Convertir de nuevo al mismo formato
+    next_day_str = next_day.strftime("%d de %B del %Y")
+    return next_day_str
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
