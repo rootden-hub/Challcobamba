@@ -310,7 +310,7 @@ def plot_eventos(df, report_date):
     ax.set_ylabel('Eventos')
      # Calcular la nueva fecha sumando un día
     report_date_next_day = add_day_to_date(report_date)
-    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date} a {report_date_next_day}\nSensores bamba', fontsize=16, pad=20)
+    ax.set_title(f'Frecuencia de descargas eléctricas por hora del día {report_date} a {report_date_next_day}\nSensores challcobamba', fontsize=16, pad=20)
     # Rango de etiquetas: 07:00 a 07:00 del día siguiente
     horas = [f'{(h % 24):02d}:00' for h in range(7, 31)]  # 7 a 30, ajustando al formato de 24 horas
     x_ticks = range(len(horas))  # Posiciones en el eje X
