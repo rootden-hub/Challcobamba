@@ -208,8 +208,10 @@ def generate_daily_report(caution_df, alarm_df, report_date):
                         fontsize=9, color='black', rotation=90)
            
                 
+    # Calcular la nueva fecha sumando un día
+    report_date_next_day = add_day_to_date(report_date)              
     ax.set_yticks([])
-    ax.set_title(f'{report_date} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
+    ax.set_title(f'{report_date}al{report_date_next_day} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
 
     # Filtrar solo las alertas de interés para la leyenda
     legend_status = ['Red', 'Yellow', 'Grey']
