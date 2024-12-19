@@ -499,8 +499,9 @@ def generate_report(df, file_name):
     title_paragraph.add_run("REPORTE DIARIO DE ALERTAS POR DESCARGAS ELÉCTRICAS ATMOSFÉRICAS\n").bold = True
     title_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
+    report_date_next_day = add_day_to_date(report_date)
     subtitle_paragraph = cell_title.add_paragraph(
-        f"De: {report_date} 07:00 horas\tA: {report_date} 07:00 horas"
+        f"De: {report_date} 07:00 horas\tA: {report_date_next_day} 07:00 horas"
     )
     subtitle_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
@@ -524,7 +525,7 @@ def generate_report(df, file_name):
 
     # Configurar el contenido del footer
     footer_paragraph.text = (
-        f"{today_date} Supervisión de Mantenimiento Eléctrico-Telecomunicaciones"
+        f"{today_date} Supervisión de Mantenimiento Eléctrico Mina-Telecomunicaciones y Dispatch"
     )
     footer_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.CENTER  # Centrar el texto
 
