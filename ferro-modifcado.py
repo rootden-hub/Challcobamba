@@ -550,7 +550,7 @@ def generate_report(df, file_name):
 
 # Función para cargar y mostrar archivo
 def cargar_archivo():
-    archivo = st.file_uploader("Selecciona un archivo de texto (.txt)", type=["txt"])
+    archivo = st.file_uploader("Selecciona un archivo de texto (.txt) Ejm:Mode report 10 12 24", type=["txt"])
     
     if archivo is not None:
         try:
