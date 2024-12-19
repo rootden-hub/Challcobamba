@@ -32,25 +32,35 @@ def get_reporte_date(file_path):
     date_match = re.search(r'(\d{2}) (\d{2}) (\d{2})', file_name)
     
     if date_match:
-        day = date_match.group(1)
-        month = int(date_match.group(2))
-        # Asumir que los años son del 2000 en adelante
-        year = "20" + date_match.group(3)
+        day = int(date_match.group(1))   # Convertir a entero
+        month = int(date_match.group(2)) # Convertir a entero
+        year = "20" + date_match.group(3)  # Asumir que los años son del 2000 en adelante
 
-        # Convertir el mes numérico a nombre en español
-        months = [
-            "enero", "febrero", "marzo", "abril", "mayo", "junio", 
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-        ]
-        month_name = months[month - 1]
-        
-        # Formatear la fecha
-        formatted_date = f"{day} de {month_name} del {year}"
+        # Crear el objeto datetime para manipularlo más tarde
+        date_obj = datetime(year=int(year), month=month, day=day)
+
+        # Formatear la fecha en el formato 'dd-mm-yyyy'
+        formatted_date = date_obj.strftime('%d-%m-%Y')  # Ejemplo: "15-12-2024"
     else:
         # Si no se encuentra la fecha en el nombre del archivo
         formatted_date = None
     
     return formatted_date
+
+def add_day_to_date(formatted_date):
+    try:
+        # Convertir formatted_date de string a datetime
+        date_obj2 = datetime.strptime(formatted_date, '%d-%m-%Y')
+
+        # Sumar un día
+        date_plus_one = date_obj2 + timedelta(days=1)
+
+        # Convertir de nuevo a formato 'dd-mm-yyyy'
+        new_formatted_date = date_plus_one.strftime('%d-%m-%Y')
+
+        return new_formatted_date
+    except ValueError:
+        return None  # Si el formato no es válido
 
 # Función para formatear el tiempo como horas:minutos
 def format_duration(td):
