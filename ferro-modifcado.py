@@ -211,7 +211,7 @@ def generate_daily_report(caution_df, alarm_df, report_date):
     # Calcular la nueva fecha sumando un día
     report_date_next_day = add_day_to_date(report_date)              
     ax.set_yticks([])
-    ax.set_title(f'{report_date}al{report_date_next_day} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
+    ax.set_title(f'{report_date} al {report_date_next_day} - Sensores Ferrobamba', fontsize=16, pad=20, loc='left')
 
     # Filtrar solo las alertas de interés para la leyenda
     legend_status = ['Red', 'Yellow', 'Grey']
@@ -542,7 +542,7 @@ def generate_report(df, file_name):
     st.download_button(
         label="Descargar Informe",
         data=doc_buffer,
-        file_name=f"informe_generado-{report_date}.docx",
+        file_name=f"REPORTE DIARIO FERROBAMBA {report_date}-{report_date_next_day}.docx",
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
 
